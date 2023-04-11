@@ -1,17 +1,17 @@
 [Comment]: <> (Describe this entire project.)
-[Comment]: <> (Describe the purpose of PromptGenius, and how it works. It uses GPT AI Technology to generate exam questions. It is a web application that is hosted on Netlify, and is free to use. Explain how it works as well.)
+[Comment]: <> (Describe the purpose of PromptGenie, and how it works. It uses GPT AI Technology to generate exam questions. It is a web application that is hosted on Netlify, and is free to use. Explain how it works as well.)
 
-# PromptGenius
+# PromptGenie
 
-PromptGenius is a web application that uses GPT AI Technology to generate exam questions. It is free to use, and is hosted on Netlify.
+PromptGenie is a web application that uses GPT AI Technology to generate exam questions. It is free to use, and is hosted on Netlify.
 
 ## How it works
 
-PromptGenius uses GPT AI Technology to generate exam questions. It uses a pre-trained GPT-2 model, and fine-tunes it on a dataset of exam questions. It then uses the fine-tuned model to generate exam questions.
+PromptGenie uses GPT AI Technology to generate exam questions. It uses a pre-trained GPT-2 model, and fine-tunes it on a dataset of exam questions. It then uses the fine-tuned model to generate exam questions.
 
 ## How to use
 
-To use PromptGenius, simply go to [promptgenius.netlify.app](PromptGenius.netlify.app). You will be greeted with a screen that looks like this:
+To use PromptGenie, simply go to [PromptGenie.netlify.app](PromptGenie.netlify.app). You will be greeted with a screen that looks like this:
 
 [Image: image]
 

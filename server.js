@@ -2,10 +2,10 @@ const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors');
 const app = express();
-const port = 3000;
+const port =  process.env.PORT || 3000;
 require('dotenv').config();
 const path = require('path');
-app.use("static", express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname + '/public'));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
