@@ -1,76 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PromptGenie - Your Exam Question Companion</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>QGenie - Your personal exam question generator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.4/dist/tailwind.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="bg-gradient-to-r from-indigo-500 to-blue-500">
-    <nav class="flex items-center justify-between flex-wrap bg-transparent p-6">
-        <div class="flex items-center flex-shrink-0 text-white mr-6">
-        <img src="./assets/pgv1tp.png" alt="PromptGenie Logo" class="h-32 w-auto">
-          <span class="font-semibold text-xl tracking-tight">PromptGenie</span>
-        </div>
-        <div class="block lg:hidden">
-          <button class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-500 hover:text-white hover:border-white">
-            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-          </button>
-        </div>
-      </nav>
+    <script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="./assets/favicon.ico" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+      <!-- Logo -->
+      <div class="flex justify-center">
+        <img src="./assets/logo-transparent-png.png" alt="QGenie logo" class="h-12 w-48" />
+      </div>
 
-    <main class="container mx-auto mt-8 px-8">
-        <div class="flex flex-col items-center justify-center">
-            <h2 class="text-2xl font-bold text-white mb-4">Generate an Exam-Style Question</h2>
-            <p class="text-white mb-8">Select a prompt from the syllabus below and click the button to generate 5 exam style questions.</p>
-            <form id="question-form" class="w-full max-w-sm">
-                <div class="flex items-center border-b border-b-2 border-white py-2">
-                    <select id="prompt" name="prompt" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
-                        <option value="">Select a Prompt</option>
-                        <optgroup label="Edexcel Economics A: Introduction to Markets and Market Failure"></optgroup>
-                        <option value="1">The Economic Problem</option>
-                        <option value="1">Allocation of Resources</option>
-                        <option value ="1">Demand
-                        <option value="1">Supply</option>
-                        <option value="1">Elasticity</option>
-                        <option value="1"> Market Equilibrium</option>
-                        <option value="1">Indirect Taxes and Subsidies</option>
-                        <option value="1">Price Controls: Minimum and Maximum Prices</option>
-                        <option value="1">Market Failure and Externalities</option>   
-                        <option value="1">Public Goods and Quasi-Public Goods</option>
-                        <option value="1"> Common access resources</option>
-                        <option value="1">Information asymmetry and market failure</option>
-                        <optgroup label="Edexcel Economics A: The UK Economy - Performance and Policies"></optgroup>
-                        <option value="2">Measures of Economic Performance</option>
-                        <option value="2">Aggregate Demand</option>
-                        <option value="2">Aggregate Supply</option>
-                        <option value="2">National Income and Economic Welfare</option>
-                        <option value="2">Economic Growth</option>
-                        <option value="2">Inflation</option>
-                        <option value="2">Unemployment</option>
-                        <option value="2">Balance of Payments</option>
-                        <option value="2">Macroeconomic Objectives and Policy</option>
-                        <option value="2">International Trade</option>
-                        <optgroup label="AQA AS History: Tsarist Russia, 1855-1917"></optgroup>
-                        <optgroup label="AQA AS History: The English Revolution, 1625-1642"></optgroup>
-                        <optgroup label="Edexcel AS Government and Politics: UK Government"></optgroup>
-                        <optgroup label="Edexcel AS Government and Politics: UK Politics"></optgroup>
-                    </select>
-                    <button id="generate-btn" class="flex-shrink-0 bg-white hover:bg-gray-300 border-white hover:border-gray-300 text-indigo-500 hover:text-white border-4 text-sm font-bold py-1 px-2 rounded" type="button">
-                        Generate Question
-                    </button>
-                </div>
-            </form>
-            <div id="question-container" class="mt-8">
-                <div id="loader" class="fixed top-0 left-0 w-full h-full bg-gray-300 opacity-0 z-50 transition-opacity duration-300 flex justify-center items-center">
-                    <div class="loader"></div>
-                  </div>
+      <!-- Heading -->
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mt-8">
+        QGenie - Your personal exam question generator
+      </h1>
+
+      <!-- Subheading -->
+      <p class="text-lg md:text-xl text-gray-600 text-center mt-4 mb-8">
+        Get high-quality exam-style questions for GCSE and A-Level subjects in seconds
+      </p>
+
+      <!-- CTA Button -->
+      <div class="flex justify-center">
+        <a href="/gen" id="cta" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wide">
+          Get started now
+        </a>
+      </div>
+
+      <!-- Features -->
+      <div class="mt-16">
+        <h2 class="text-2xl font-bold text-gray-800 mb-8">Features</h2>
+
+        <div class="flex flex-col md:flex-row">
+          <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+            <h3 class="text-xl font-bold text-indigo-600 mb-4">Instantly generate exam-style questions</h3>
+            <p class="text-gray-600">
+              QGenie can generate exam-style questions across a range of GCSE and A-Level subjects in seconds, saving you time and effort.
+            </p>
+          </div>
+
+          <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+            <h3 class="text-xl font-bold text-indigo-600 mb-4">Access a wide variety of essay questions</h3>
+            <p class="text-gray-600">
+              QGenie provides access to a wide variety of essay questions on specific topics in each subject's specification, helping you to prepare for exams with ease.
+            </p>
+          </div>
+
+          <div class="flex-1 mb-8 md:mb-0">
+            <h3 class="text-xl font-bold text-indigo-600 mb-4">Test your knowledge and prepare for exams</h3>
+            <p class="text-gray-600">
+              With QGenie, you can test your knowledge and prepare for exams with ease, thanks to the intelligent question generation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="mt-16">
+        <h2 class="text-2xl font-bold text-gray-800 mb-8">Testimonials</h2>
+
+        <div class="flex flex-col md:flex-row">
+          <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+            <blockquote class="p-4 border-l-4 border-indigo-600">
+              <p class="text-lg font-medium text-gray-800">
+                "QGenie has been a lifesaver for me! As a busy A-Level student, I don't have time to create my own questions. QGenie does it all for me!"
+              </p>
+              <footer class="mt-2">
+                <cite class="font-bold text-indigo-600">Sarah, A-Level Biology student</cite>
+              </footer>
+            </blockquote>
+          </div>
+
+          <div class="flex-1">
+            <blockquote class="p-4 border-l-4 border-indigo-600">
+              <p class="text-lg font-medium text-gray-800">
+                "The questions generated by QGenie are of a high standard and are perfect for testing my knowledge before exams."
+              </p>
+              <footer class="mt-2">
+                <cite class="font-bold text-indigo-600">Jack, GCSE Maths student</cite>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="mt-16">
+        <h2 class="text-2xl font-bold text-gray-800 mb-8">Pricing</h2>
+
+        <div class="flex flex-col md:flex-row">
+          <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+            <div class="bg-white p-8 rounded-lg shadow">
+              <h3 class="text-xl font-bold text-gray-800 mb-4">Basic</h3>
+              <p class="text-gray-600 mb-4">Free</p>
+              <ul class="text-gray-600">
+                <li>Access to all subjects and topics</li>
+              </ul>
             </div>
-        </div>
-    </main>
+          </div>
 
-    <script src="./index.js"></script>
-</body>
+          <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+            <div class="bg-white p-8 rounded-lg shadow">
+              <h3 class="text-xl font-bold text-gray-800 mb-4">Pro</h3>
+              <p class="text-gray-600 mb-4">$9.99/month</p>
+              <ul class="text-gray-600">
+                <li>Access to all subjects and topics</li>
+                <li>Ability to save questions</li>
+                <li>Access to premium essay questions</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex-1">
+            <div class="bg-white p-8 rounded-lg shadow">
+              <h3 class="text-xl font-bold text-gray-800 mb-4">Premium</h3>
+              <p class="text-gray-600 mb-4">$19.99/month</p>
+              <ul class="text-gray-600">
+                <li>Access to all subjects and topics</li>
+                <li>Ability to save questions</li>
+                <li>Access to premium essay questions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mt-16">
+        <h2 class="text-2xl font-bold text-gray-800 mb-8">FAQ</h2>
+
+        <div class="mb-4">
+          <h3 class="text-xl font-bold text-indigo-600 mb-2">How does QGenie generate questions?</h3>
+          <p class="text-gray-600">QGenie uses a trained GPT model to generate questions based on specific topics in each subject's specification.</p>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-xl font-bold text-indigo-600 mb-2">Is QGenie only for UK students?</h3>
+          <p class="text-gray-600">No, QGenie can be used by anyone studying GCSE or A-Level subjects.</p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-indigo-600 mb-2">How many questions can I generate with QGenie?</h3>
+          <p class="text-gray-600">There is no limit to the number of questions you can generate with QGenie.</p>
+        </div>
+      </div>
+      <!-- Footer -->
+        <div class="mt-16">
+            <div class="flex flex-col md:flex-row">
+            <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">QGenie</h3>
+                <p class="text-gray-600">
+                QGenie is a free tool that can generate exam-style questions across a range of GCSE and A-Level subjects in seconds.
+                </p>
+            </div>
+    
+            <div class="flex-1 mb-8 md:mb-0 md:mr-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Contact</h3>
+                <p class="text-gray-600">
+                <a href="mailto:ceo@aspekts.dev"><i class="fa fa-envelope" aria-hidden="true"></i> Email</a>
+                </p>
+                <p class="text-gray-600">
+                <a href="https://twitter.com/xAspekts"><i class="fab fa-twitter"></i> Twitter</a>
+                </p>
+                <p class="text-gray-600">
+                <a href="https://discord.com/GxGTHBC"><i class="fab fa-discord"></i> Discord</a>
+                </p>
+    </div>
+  </body>
 </html>

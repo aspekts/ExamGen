@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>QGenie - Your Exam Question Companion</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.4/dist/tailwind.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./assets/favicon.ico" />
+</head>
+<body class="bg-gradient-to-r from-indigo-500 to-blue-500">
+    <nav class="flex items-center justify-between flex-wrap bg-transparent p-6">
+        <div class="flex items-center flex-shrink-0 text-white mr-6">
+        <img src="./assets/logo-transparent-png.png" alt="QGenie Logo" class="h-12 w-auto">
+        </div>
+        <div class="block lg:hidden">
+          <button class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-500 hover:text-white hover:border-white">
+            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+          </button>
+        </div>
+      </nav>
+
+    <main class="container mx-auto mt-8 px-8">
+        <div class="flex flex-col items-center justify-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Generate an Exam-Style Question</h2>
+            <p class="text-white mb-8">Select a prompt from the syllabus below and click the button to generate 5 exam style questions.</p>
+            <form id="question-form" class="w-full max-w-sm">
+                <div class="flex items-center border-b border-b-2 border-white py-2">
+                    <select id="prompt" name="prompt" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
+                        <option value="">Select a Prompt</option>
+                        <optgroup label="Edexcel Economics A: Introduction to Markets and Market Failure"></optgroup>
+                        <option value="1">The Economic Problem</option>
+                        <option value="1">Allocation of Resources</option>
+                        <option value ="1">Demand
+                        <option value="1">Supply</option>
+                        <option value="1">Elasticity</option>
+                        <option value="1"> Market Equilibrium</option>
+                        <option value="1">Indirect Taxes and Subsidies</option>
+                        <option value="1">Price Controls: Minimum and Maximum Prices</option>
+                        <option value="1">Market Failure and Externalities</option>   
+                        <option value="1">Public Goods and Quasi-Public Goods</option>
+                        <option value="1"> Common access resources</option>
+                        <option value="1">Information asymmetry and market failure</option>
+                        <optgroup label="Edexcel Economics A: The UK Economy - Performance and Policies"></optgroup>
+                        <option value="2">Measures of Economic Performance</option>
+                        <option value="2">Aggregate Demand</option>
+                        <option value="2">Aggregate Supply</option>
+                        <option value="2">National Income and Economic Welfare</option>
+                        <option value="2">Economic Growth</option>
+                        <option value="2">Inflation</option>
+                        <option value="2">Unemployment</option>
+                        <option value="2">Balance of Payments</option>
+                        <option value="2">Macroeconomic Objectives and Policy</option>
+                        <option value="2">International Trade</option>
+                        <optgroup label="AQA AS History: Tsarist Russia, 1855-1917"></optgroup>
+                        <optgroup label="AQA AS History: The English Revolution, 1625-1642"></optgroup>
+                        <optgroup label="Edexcel AS Government and Politics: UK Government"></optgroup>
+                        <optgroup label="Edexcel AS Government and Politics: UK Politics"></optgroup>
+                    </select>
+                    <button id="generate-btn" class="flex-shrink-0 bg-white hover:bg-gray-300 border-white hover:border-gray-300 text-indigo-500 hover:text-white border-4 text-sm font-bold py-1 px-2 rounded" type="button">
+                        Generate Question
+                    </button>
+                </div>
+            </form>
+            <div id="question-container" class="mt-8">
+            </div>
+        </div>
+    </main>
+
+    <script src="./index.js"></script>
+</body>
+</html>
