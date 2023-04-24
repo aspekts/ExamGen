@@ -7,12 +7,10 @@ if (!questionContainer.innerText) {
 }
 generateBtn.addEventListener('click', () => {
     questionContainer.innerHTML = `
-    <div style="border-top-color:transparent"
-    class="w-16 h-16 border-4 border-blue-400 border-dotted rounded-full animate-spin"></div>
-</div>
+    <img src="./assets/icon.gif" alt="QGenie Logo Anim" class="h-16 w-16"></img>
     `;
     const prompt = form.elements.prompt.options[form.elements.prompt.selectedIndex].text;
-
+    const val = form.elements.prompt.options[form.elements.prompt.selectedIndex].value;
     if (prompt) {
         // Show the loader
         fetch('/generate-question', {
@@ -20,7 +18,7 @@ generateBtn.addEventListener('click', () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ prompt })
+            body: JSON.stringify({ value: val, prompt: prompt })
         })
         .then(response => response.json())
         .then(data => {
