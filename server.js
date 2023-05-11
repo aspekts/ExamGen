@@ -52,7 +52,7 @@ async function generateQuestion(value, prompt) {
     const response = await fetch(`${process.env.url}?${query}`);
     if(response.ok) {
     const data = await response.json();
-    return data.message.trim();
+    return data.generated_text.trim();
     }
     else {
         const data = await response.json()
