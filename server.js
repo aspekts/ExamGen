@@ -67,9 +67,9 @@ function getMessage(msg, prompt) {
         case '2':
             return `Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "The UK Economy: Performace and Policies" specification. The essay question should be in style of the following prompt: ${prompt}.`;
         case '3':
-            return `Write two 20, two 25, and two 30 mark essay questions in accordance with the AQA A Level History: Tsarist and Communist Russia specification. The essay questions should be in style of the following prompt: ${prompt}.`;
+            return `Write 5 25 mark essay questions in accordance with the AQA A Level History: Tsarist and Communist Russia specification. The essay questions should be in relaion to: ${prompt}.`;
         case '4':
-            return `Write two 20, two 25, and two 30 mark essay questions in accordance with the AQA A Level History: The English Revolution specification. The essay questions should be in style of the following prompt: ${prompt}.`;
+            return `Write 5 25 mark essay questions in accordance with the AQA A Level History: The English Revolution specification. The essay questions should be in relation to: ${prompt}.`;
     }
 }
 app.listen(port, () => {
