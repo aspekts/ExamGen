@@ -42,7 +42,7 @@ app.post(`/generate-question`, async (req, res) => {
 async function generateQuestion(value, prompt) {
     const options = {
         "key":"B9AAEG066K9BDL2HV7HEZWSYP4DHAGSK3RE",
-        "message": `Ignore all previous conversation. 
+        "inputs": `Ignore all previous conversation. 
         ${getMessage(value, prompt)}
         Provide the response in the following format:
         <Question> [Marks]. 
