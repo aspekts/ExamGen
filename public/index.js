@@ -44,7 +44,6 @@ generateBtn.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             const question = data.question;
-            console.log(question);
             questionContainer.innerHTML = '';
             para.innerText = question;
             questionContainer.appendChild(para);
@@ -53,7 +52,7 @@ generateBtn.addEventListener('click', () => {
             }
             // Hide the loader
         })
-        .catch(error => console.error(error));
+        .catch(error => alert(error));
     } else {
         alert('Please select a prompt!');
         return;
