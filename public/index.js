@@ -5,7 +5,7 @@ const para = document.createElement('p');
 const promptSelect = document.getElementById('prompt');
 const subPromptSelect = document.getElementById('sub-prompt');
 const nestedSelect = document.getElementById('nested-select');
-import prompts from './subjects.json' assert { type: "json" };
+const prompts = require("./subjects.json");
 promptSelect.addEventListener('change', (e) => {
     const value = e.target.value;
 
