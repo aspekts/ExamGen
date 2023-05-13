@@ -1,3 +1,10 @@
+.hidden {
+    display: none;
+}
+#nested-select {
+    transition: all 0.2s ease-in-out;
+
+}
 #question-container {
     background-color: #fff;
     border-radius: 8px;

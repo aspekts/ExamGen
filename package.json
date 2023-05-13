@@ -7,6 +7,34 @@
     "express-session": "^1.17.3",
     "node-fetch": "^2.6.9",
     "passport": "^0.6.0",
-    "passport-auth0": "^1.4.3"
-  }
+    "passport-auth0": "^1.4.3",
+    "tailwindcss-labeled-groups": "^0.0.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "qgenie",
+  "description": "QGenie is a web application that uses GPT AI Technology to generate exam questions. It is free to use, and is hosted on Netlify.",
+  "version": "1.0.0",
+  "main": "server.js",
+  "module": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aspekts/QGenie.git"
+  },
+  "keywords": [
+    "exam",
+    "ai",
+    "model",
+    "generator",
+    "examgen",
+    "genie",
+    "gen"
+  ],
+  "author": "Aspekts",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aspekts/QGenie/issues"
+  },
+  "homepage": "https://github.com/aspekts/QGenie#readme"
 }
