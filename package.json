@@ -8,10 +8,12 @@
     "node-fetch": "^2.6.9",
     "passport": "^0.6.0",
     "passport-auth0": "^1.4.3",
+    "serverless-http": "^3.2.0",
     "tailwindcss-labeled-groups": "^0.0.2"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "netlify functions:serve server.js",
+    "build": "netlify functions:build server.js"
   },
   "name": "qgenie",
   "description": "QGenie is a web application that uses GPT AI Technology to generate exam questions. It is free to use, and is hosted on Netlify.",
