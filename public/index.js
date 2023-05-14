@@ -27,7 +27,8 @@ if (!questionContainer.innerText) {
 }
 
 generateBtn.addEventListener('click', () => {
-    const prompt = form.elements.prompt.options[form.elements.prompt.selectedIndex].text;
+    // get value of nested  subprompt select
+    const prompt = form.elements['sub-prompt'].options[form.elements['sub-prompt'].selectedIndex].text;
     const val = form.elements.prompt.options[form.elements.prompt.selectedIndex].value;
     if (prompt && val !== 'none') {
         // Show the loader
