@@ -106,23 +106,7 @@ function getMessage(msg, prompt) {
             return `Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry Specification. Write any equations or mathematical syntax involved in any questions or answers in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`;
     }
 }
-// define your Edge Function using the routes and the Edge Functions API
-module.exports = async (req, res) => {
-    try {
-      // use the Express app to handle the request
-      await app(req, res);
-  
-      // handle any requests that aren't matched by the Express app
-      if (!res.finished) {
-        await handle(req, res);
-      }
-    } catch (error) {
-      // handle any errors that occur during the request
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  };
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
 });
-
+module.exports = app;
