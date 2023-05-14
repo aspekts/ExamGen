@@ -1,17 +1,15 @@
 {
   "version": 2,
-  "routes": [
+  "builds": [
     {
-      "src": "/(.*)",
-      "dest": "/server.js"
+      "src": "server.js",
+      "use": "@vercel/node"
     }
   ],
-  "edge": {
-    "handlers": [
+  "routes": [
       {
-        "src": "/(.*)",
-        "handler": "server.js"
+          "src": "/(.*)",
+          "dest": "/server.js"
       }
-    ]
-  }
+  ]
 }
