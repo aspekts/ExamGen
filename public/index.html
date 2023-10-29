@@ -9,52 +9,115 @@
     <script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
     <link rel="icon" href="./assets/favicon.ico" />
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-900">
     <div class="container mx-auto px-4 py-8">
       <!-- Logo -->
       <div class="flex justify-center">
-        <a href="#"><img src="./assets/logo-transparent-png.png" alt="QGenie logo" class="h-12 w-48" /></a>
+        <a href="#"><img src="./assets/new/QTP.svg" alt="QGenie logo" class="h-20 w-48" />
+        <img src="./assets/new/GenieYellow.svg" alt="QGenie logo" class="h-20 w-48"/></a>
       </div>
 
       <!-- Heading -->
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mt-8">
-        QGenie - Your personal exam question generator
+      <h1 class="text-4xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-pink-500 text-center mt-8">
+        QGenie - Your <span
+        class="txt-rotate"
+        data-period="1000"
+        data-rotate='[ "exam question generator.", "exam question companion.", "exam potential unlocker.", "exam question magician.","learning empowerer." ]'></span>
+        <script>
+          var TxtRotate = function(el, toRotate, period) {
+    this.toRotate = toRotate;
+    this.el = el;
+    this.loopNum = 0;
+    this.period = parseInt(period, 10) || 2000;
+    this.txt = '';
+    this.tick();
+    this.isDeleting = false;
+  };
+  
+  TxtRotate.prototype.tick = function() {
+    var i = this.loopNum % this.toRotate.length;
+    var fullTxt = this.toRotate[i];
+  
+    if (this.isDeleting) {
+      this.txt = fullTxt.substring(0, this.txt.length - 1);
+    } else {
+      this.txt = fullTxt.substring(0, this.txt.length + 1);
+    }
+  
+    this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+  
+    var that = this;
+    var delta = 150 - Math.random() * 100;
+  
+    if (this.isDeleting) { delta /= 2; }
+  
+    if (!this.isDeleting && this.txt === fullTxt) {
+      delta = this.period;
+      this.isDeleting = true;
+    } else if (this.isDeleting && this.txt === '') {
+      this.isDeleting = false;
+      this.loopNum++;
+      delta = 500;
+    }
+  
+    setTimeout(function() {
+      that.tick();
+    }, delta);
+  };
+  window.onload = function() {
+    var elements = document.getElementsByClassName('txt-rotate');
+    for (var i=0; i<elements.length; i++) {
+      var toRotate = elements[i].getAttribute('data-rotate');
+      var period = elements[i].getAttribute('data-period');
+      if (toRotate) {
+        new TxtRotate(elements[i], JSON.parse(toRotate), period);
+      }
+    }
+    // INJECT CSS
+    var css = document.createElement("style");
+    css.type = "text/css";
+    css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #666 }";
+    document.body.appendChild(css);
+  };
+  
+        </script>
       </h1>
 
+
       <!-- Subheading -->
-      <p class="text-lg md:text-xl text-gray-600 text-center mt-4 mb-8">
-        Get high-quality exam-style questions for A-Level subjects in seconds
+      <p class="text-lg md:text-xl text-gray-100 text-center mt-4 mb-8">
+        Get high-quality exam-style questions for A-Level subjects in seconds with the help of AI.
       </p>
 
       <!-- CTA Button -->
       <div class="flex justify-center">
-        <a href="/gen" id="cta" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wide">
+        <a href="/gen" id="cta" class="bg-yellow-400 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wide">
           Get started now
         </a>
       </div>
 
       <!-- Features -->
       <div class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-800 mb-8">Features</h2>
+        <h2 class="text-2xl font-bold text-gray-100 mb-8">Features</h2>
 
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
-            <h3 class="text-xl font-bold text-indigo-600 mb-4">Instantly generate exam-style questions</h3>
-            <p class="text-gray-600">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4">Instantly generate exam-style questions</h3>
+            <p class="text-gray-100">
               QGenie can generate exam-style questions across a range of A-Level subjects in seconds, saving you time and effort.
             </p>
           </div>
 
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
-            <h3 class="text-xl font-bold text-indigo-600 mb-4">Access a wide variety of essay questions</h3>
-            <p class="text-gray-600">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4">Access a wide variety of essay questions</h3>
+            <p class="text-gray-100">
               QGenie provides access to a wide variety of essay questions on specific topics in each subject's specification, helping you to prepare for exams with ease.
             </p>
           </div>
 
           <div class="flex-1 mb-8 md:mb-0">
-            <h3 class="text-xl font-bold text-indigo-600 mb-4">Test your knowledge and prepare for exams</h3>
-            <p class="text-gray-600">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4">Test your knowledge and prepare for exams</h3>
+            <p class="text-gray-100">
               With QGenie, you can test your knowledge and prepare for exams with ease, thanks to the intelligent question generation.
             </p>
           </div>
@@ -63,27 +126,27 @@
 
       <!-- Testimonials -->
       <div class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-800 mb-8">Testimonials</h2>
+        <h2 class="text-2xl font-bold text-gray-100 mb-8">Testimonials</h2>
 
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
-            <blockquote class="p-4 border-l-4 border-indigo-600">
-              <p class="text-lg font-medium text-gray-800">
+            <blockquote class="p-4 border-l-4 border-yellow-400">
+              <p class="text-lg font-medium text-gray-100">
                 "QGenie has been a lifesaver for me! As a busy A-Level student, I don't have time to create my own questions. QGenie does it all for me!"
               </p>
               <footer class="mt-2">
-                <cite class="font-bold text-indigo-600">Sarah, A-Level Biology student</cite>
+                <cite class="font-bold text-yellow-400">Sarah, A-Level Biology student</cite>
               </footer>
             </blockquote>
           </div>
 
           <div class="flex-1">
-            <blockquote class="p-4 border-l-4 border-indigo-600">
-              <p class="text-lg font-medium text-gray-800">
+            <blockquote class="p-4 border-l-4 border-yellow-400">
+              <p class="text-lg font-medium text-gray-100">
                 "QGenie is one of the best and most unique tools for learning I've found. Before using it, I was wasting hours finding exam questions, but now they are at the tip of my fingers!"
               </p>
               <footer class="mt-2">
-                <cite class="font-bold text-indigo-600">Zayn, A Level Maths Student</cite>
+                <cite class="font-bold text-yellow-400">Zayn, A Level Maths Student</cite>
               </footer>
             </blockquote>
           </div>
@@ -98,8 +161,8 @@
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
             <div class="bg-white p-8 rounded-lg shadow">
               <h3 class="text-xl font-bold text-gray-800 mb-4">Basic</h3>
-              <p class="text-gray-600 mb-4">Free</p>
-              <ul class="text-gray-600">
+              <p class="text-gray-800 mb-4">Free</p>
+              <ul class="text-gray-800">
                 <li>Access to all subjects and topics</li>
                 <li>Access to 5 generations per hour</li>
               </ul>
@@ -109,8 +172,8 @@
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
             <div class="bg-white p-8 rounded-lg shadow">
               <h3 class="text-xl font-bold text-gray-800 mb-4">Pro</h3>
-              <p class="text-gray-600 mb-4">£9.99/month</p>
-              <ul class="text-gray-600">
+              <p class="text-gray-800 mb-4">£9.99/month</p>
+              <ul class="text-gray-800">
                 <li>Access to all subjects and topics</li>
                 <li>Ability to save questions</li>
                 <li>Access to 10 generations per hour</li>
@@ -121,11 +184,11 @@
           <div class="flex-1">
             <div class="bg-white p-8 rounded-lg shadow">
               <h3 class="text-xl font-bold text-gray-800 mb-4">Premium</h3>
-              <p class="text-gray-600 mb-4">£19.99/month</p>
-              <ul class="text-gray-600">
+              <p class="text-gray-800 mb-4">£19.99/month</p>
+              <ul class="text-gray-800">
                 <li>Access to all subjects and topics</li>
                 <li>Ability to save questions</li>
-                <li>Access to 60 generations hour</li>
+                <li>Unlimited generations per hour</li>
               </ul>
             </div>
           </div>
@@ -137,27 +200,27 @@
         <h2 class="text-2xl font-bold text-gray-800 mb-8">FAQ</h2>
 
         <div class="mb-4">
-          <h3 class="text-xl font-bold text-indigo-600 mb-2">How does QGenie generate questions?</h3>
-          <p class="text-gray-600">QGenie uses a trained GPT model to generate questions based on specific topics in each subject's specification.</p>
+          <h3 class="text-xl font-bold text-yellow-400 mb-2">How does QGenie generate questions?</h3>
+          <p class="text-gray-100">QGenie uses a trained GPT model to generate questions based on specific topics in each subject's specification.</p>
         </div>
 
         <div class="mb-4">
-          <h3 class="text-xl font-bold text-indigo-600 mb-2">Is QGenie only for UK students?</h3>
-          <p class="text-gray-600">Whilst the exam boards are based in the UK, the questions generated can still apply to international students</p>
+          <h3 class="text-xl font-bold text-yellow-400 mb-2">Is QGenie only for UK students?</h3>
+          <p class="text-gray-100">Whilst the exam boards are based in the UK, the questions generated can still apply to international students</p>
         </div>
 
         <div>
-          <h3 class="text-xl font-bold text-indigo-600 mb-2">How many questions can I generate with QGenie?</h3>
-          <p class="text-gray-600">QGenie generates questions in batches of 5. The amount of questions depends on the tier of your account.</p>
+          <h3 class="text-xl font-bold text-yellow-400 mb-2">How many questions can I generate with QGenie?</h3>
+          <p class="text-gray-100">QGenie generates questions in batches of 5. The amount of questions depends on the tier of your account.</p>
         </div>
       </div>
     </div>
-<footer class="relative bg-gray-100 pt-8 pb-6">
+<footer class="relative bg-gray-900 pt-8 pb-6">
   <div class="container mx-auto px-4">
     <div class="flex flex-wrap text-left lg:text-left">
       <div class="w-full lg:w-6/12 px-4">
-        <h4 class="text-3xl fonat-semibold text-gray-800">Let's keep in touch!</h4>
-        <h5 class="text-lg mt-0 mb-2 text-gray-600">
+        <h4 class="text-3xl fonat-semibold text-gray-100">Let's keep in touch!</h4>
+        <h5 class="text-lg mt-0 mb-2 text-gray-100">
           Find us on any of these platforms, we usually respond in 1-2 business days.
         </h5>
         <div class="mt-6 lg:mb-0 mb-6">
@@ -170,7 +233,7 @@
             <a href="https://discord.com/GxGTHBC"><button class="bg-white shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2" type="button">
             <i class="fab fa-discord"></i>
           </button></a>
-           <a href="https://github.com/aspekts"> <button class="bg-white text-blueGray-800 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2" type="button">
+           <a href="https://github.com/Yarn-Development"> <button class="bg-white text-blueGray-800 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2" type="button">
             <i class="fab fa-github"></i>
           </button></a>
         </div>
@@ -178,30 +241,30 @@
       <div class="w-full lg:w-6/12 px-4">
         <div class="flex flex-wrap items-top mb-6">
           <div class="w-full lg:w-4/12 px-4 ml-auto">
-            <span class="block uppercase text-blueGray-500 text-sm font-semibold mb-2">Useful Links</span>
+            <span class="block uppercase text-gray-100 text-sm font-semibold mb-2">Useful Links</span>
             <ul class="list-unstyled">
               <li>
-                <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://yarndev.co.uk">Yarn Development</a>
+                <a class="text-gray-100 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://yarndev.co.uk">Yarn Development</a>
               </li>
               <li>
-                <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://aspekts.dev/">Portfolio</a>
+                <a class="text-gray-100 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://aspekts.dev/">Portfolio</a>
               </li>
               <li>
-                <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://www.github.com/aspekts">Github</a>
+                <a class="text-gray-100 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://www.github.com/aspekts">Github</a>
               </li>
             </ul>
           </div>
           <div class="w-full lg:w-4/12 px-4">
-            <span class="block uppercase text-blueGray-500 text-sm font-semibold mb-2">Other Resources</span>
+            <span class="block uppercase text-gray-100 text-sm font-semibold mb-2">Other Resources</span>
             <ul class="list-unstyled">
               <li>
-                <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/aspekts/QGenie/blob/master/LICENSE">MIT License</a>
+                <a class="text-gray-100 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/aspekts/QGenie/blob/master/LICENSE">MIT License</a>
               </li>
               <li>
-                <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://yarndev.co.uk/privacy">Privacy Policy</a>
+                <a class="text-gray-100 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://yarndev.co.uk/privacy">Privacy Policy</a>
               </li>
               <li>
-                <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://aspekts.dev/contact">Contact Us</a>
+                <a class="text-gray-100 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://aspekts.dev/contact">Contact Us</a>
               </li>
             </ul>
           </div>
@@ -211,7 +274,7 @@
     <hr class="my-6 border-blueGray-300">
     <div class="flex flex-wrap items-center md:justify-between justify-center">
       <div class="w-full md:w-4/12 px-4 mx-auto text-center">
-        <div class="text-sm text-blueGray-500 font-semibold py-1">
+        <div class="text-sm text-gray-100 font-semibold py-1">
           Copyright © <span id="get-current-year">2023</span><a href="https://aspekts.dev/" class="text-blueGray-500 hover:text-gray-800" target="_blank"> Aspekts, associated with
           <a href="https://yarndev.co.uk/" class="text-blueGray-500 hover:text-blueGray-800">Yarn Development</a>.
         </div>
