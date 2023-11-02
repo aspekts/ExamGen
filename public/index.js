@@ -7,7 +7,7 @@ if (!questionContainer.innerText) {
 }
 generateBtn.addEventListener('click', () => {
     questionContainer.innerHTML = `
-    <img src="./assets/icon.gif" alt="QGenie Logo Anim" class="h-16 w-16"></img>
+    <img src="./assets/plainlgc.gif" alt="QGenie Logo Anim" class="h-16 w-16"></img>
     `;
     const prompt = form.elements.prompt.options[form.elements.prompt.selectedIndex].text;
     const val = form.elements.prompt.options[form.elements.prompt.selectedIndex].value;
@@ -25,6 +25,7 @@ generateBtn.addEventListener('click', () => {
             const question = data.question;
             questionContainer.innerHTML = '';
             questionContainer.innerText = question;
+            MathJax.typeset([questionContainer]);
             // Hide the loader
         })
         .catch(error => console.error(error));
