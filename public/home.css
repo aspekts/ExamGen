@@ -1,0 +1,8 @@
+.check {
+    width: 24px;
+    height: 24px;
+  }
+.text {
+    display: inline-block;
+    vertical-align: middle;
+}
