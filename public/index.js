@@ -33,7 +33,7 @@ generateBtn.addEventListener('click', () => {
     if (prompt && val !== 'none') {
         // Show the loader
         questionContainer.innerHTML = `
-            <img src="./assets/icon.gif" alt="QGenie Logo Anim" class="h-16 w-16"></img>
+            <img src="./assets/new/logo.gif" alt="QGenie Logo Anim" class="h-16 w-28"></img>
         `;
         fetch('/generate-question', {
             method: 'POST',
@@ -49,7 +49,10 @@ generateBtn.addEventListener('click', () => {
             para.innerText = question;
             questionContainer.appendChild(para);
             if (MathJax) {
-                MathJax.typeset([questionContainer]);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
+            }
+            if(!MathJax) {
+                console.log("MathJax not loaded");
             }
             // Hide the loader
         })

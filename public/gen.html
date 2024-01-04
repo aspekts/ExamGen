@@ -5,24 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>QGenie - Your Exam Question Companion</title>
-    <script>
-        MathJax = {
-          loader: {load: ['[tex]/mhchem']},
-          tex: {inlineMath: [['$', '$'], ['\\(', '\\)']], packages: {'[+]': ['mhchem']}}
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <!-- MathJax, only on tex loads-->
+
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="check-for-tex.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="
     https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css
     " rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="./assets/favicon.ico" />
+    <link rel="icon" href="./assets/new/QTP.svg" />
 </head>
 <body class="bg-gradient-to-r from-indigo-500 to-blue-500">
     <nav class="flex items-center justify-between flex-wrap bg-transparent p-6">
         <div class="flex items-center flex-shrink-0 text-white mr-6">
-            <a href="/"><img src="./assets/logo-transparent-png.png" alt="QGenie Logo" class="h-12 w-auto"></a>
+            <a href="/"><img src="./assets/new/logo.png" alt="QGenie Logo" class="h-12 w-auto"></a>
         </div>
     </nav>
 <noscript>
