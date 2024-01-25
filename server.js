@@ -27,29 +27,32 @@ app.use(auth({
     }));
 app.use(async function (req, res, next) {
         res.locals.user = req.oidc.user;
-        let profile = db.get(`user:${req.oidc.user.sid}`) ? db.get(`user:${req.oidc.user.sid}`)  : null;
-        if (profile) {
-            const reset_time = db.get(profile).gen_refresh ? db.get(profile).gen_refresh : 0;
-            if(Date.now() > reset_time) await setDB();
-        }
-       else await setDB();
         next();
-
-      async function setDB() {
-        const currentDate = new Date();
-        await db.set(`user:${req.oidc.user.sid}`, {
-            user:req.oidc.user,
-            premium: false,
-            premiumExpiry: null,
-            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0),
-            free_gens:10
-        });
-      }
     });
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.get('/', (req, res) => {
     res.render(path.join(__dirname + '/public/views/index.ejs'));
 })
-app.get('/gen', requiresAuth(), (req, res) => {
+app.get('/gen', requiresAuth(), async (req, res) => {
+    let profile = await db.get(`user:${req.oidc.user.sid}`) ? db.get(`user:${req.oidc.user.sid}`)  : null;
+    if (profile) {
+        const reset_time = await db.get(profile).gen_refresh ? db.get(profile).gen_refresh : 0;
+        if(Date.now() > reset_time) await setDB();
+    }
+   else await setDB();
+    next();
+
+  async function setDB() {
+    const currentDate = new Date();
+    await db.set(`user:${req.oidc.user.sid}`, {
+        user:req.oidc.user,
+        premium: false,
+        premiumExpiry: null,
+        gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0),
+        free_gens:10
+    });
+  }
     res.render(path.join(__dirname + '/public/views/gen.ejs'), {
         user: req.oidc.user,
         db: db
@@ -66,8 +69,7 @@ app.post(`/generate-question`, async (req, res) => {
         res.status(400).send({ error: 'Prompt not provided.' });
     }
 });
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+
 async function generateQuestion(value, prompt) {
     const text = `
         You are a language model that provides correct and detailed exam style questions, in order, in accordance with a specific subject's specification. Put the question number then mention the question explicitly, as well as the marks, and then in the next line "Ans: " and Answer.
