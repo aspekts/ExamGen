@@ -5,7 +5,12 @@ const { auth, requiresAuth } = require('express-openid-connect');
 const port =  process.env.PORT || 3000;
 require('dotenv').config();
 const path = require('path');
-
+const keyv = require('keyv');
+const db = new keyv(process.env.mysql);
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.key);
+const gemini = genAI.getGenerativeModel({model:  "gemini-pro"});
+db.on('error', err => console.log('Connection Error', err));
 /**
  * App Configuration
 */
@@ -20,12 +25,35 @@ app.use(auth({
     clientID: process.env.AUTH0_CLIENT_ID,
     issuerBaseURL: process.env.AUTH0_DOMAIN
     }));
-app.use(function (req, res, next) {
+app.use(async function (req, res, next) {
         res.locals.user = req.oidc.user;
+        let profile = db.get(`user:${req.oidc.user.sid}`) ? db.get(`user:${req.oidc.user.sid}`)  : null;
+        if (profile) {
+            const reset_time = db.get(profile).gen_refresh ? db.get(profile).gen_refresh : 0;
+            if(Date.now() > reset_time) await setDB();
+        }
+       else await setDB();
         next();
-      });
+
+      async function setDB() {
+        const currentDate = new Date();
+        await db.set(`user:${req.oidc.user.sid}`, {
+            user:req.oidc.user,
+            premium: false,
+            premiumExpiry: null,
+            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0),
+            free_gens:10
+        });
+      }
+    });
+app.get('/', (req, res) => {
+    res.render(path.join(__dirname + '/public/views/index.ejs'));
+})
 app.get('/gen', requiresAuth(), (req, res) => {
-    res.sendFile(path.join(__dirname + '/public/gen.html'));
+    res.render(path.join(__dirname + '/public/views/gen.ejs'), {
+        user: req.oidc.user,
+        db: db
+    }); 
 });
   // Defined routes
 app.post(`/generate-question`, async (req, res) => {
@@ -38,108 +66,68 @@ app.post(`/generate-question`, async (req, res) => {
         res.status(400).send({ error: 'Prompt not provided.' });
     }
 });
-
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 async function generateQuestion(value, prompt) {
-    let options = {
-        "model":"mistralai/Mixtral-8x7B-Instruct-v0.1",
-        "prompt": `
+    const text = `
+        You are a language model that provides correct and detailed exam style questions, in order, in accordance with a specific subject's specification. Put the question number then mention the question explicitly, as well as the marks, and then in the next line "Ans: " and Answer.
+        Output format:
+       <Question Number>. <Question> [<Marks>]
+
+        Sample Output (Economics, Market Failure):
+
+        1. Explain how ‘asymmetric information’ can lead to market failure in health provision. [5]
+        2. Assess the benefits of indirect taxation to remove market failure for plastic bags. [8]
+        3. ‘Public parks are a public good’. Assess this statement. [10]
+
+        For this prompt specifically:
         ${getMessage(value, prompt)[0]}
-        Provide the response in the following format:
-        <Question> [Marks]. 
-        DO NOT provide the answer to the questions.
-        Do NOT provide any tips, notes or disclaimers alongside the response.
-        `,
-    };
-    options = Object.assign(options, getMessage(value, prompt)[1]);
-    const query = new URLSearchParams(options).toString();
-    const response = await fetch(`${process.env.url}?${query}`,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.key}`
-    },
-        body: JSON.stringify(options)
-    });
-    if(response.ok) {
-    const data = await response.json();
-    if(!data.output.choices[0].text) {
-        return 'Internal Generation Error. Please try again momentarily. Please note that QGenie is still heavily experimental, and so the generation of questions may not always be successful.';
-    }
-    if(data.output.choices[0].text.toLowerCase().includes(`note`)) {
-        return data.output.choices[0].text.trim().split(`Note:`)[0].trim();
-    }
-    return data.output.choices[0].text.trim();
-    }
-    else {
-        const data = await response.json();
-        if(data.status === 429) {
-            return 'QGenie is currently at maximum capacity, and is therefore experiencing a rate limit. Please try again later.';
-        }
-        if(data.status === 503) {
-            return 'QGenie is currently experiencing an outage. Please try again later.';
-        }
-        if(data.status === 529) {
-            return "QGenie is currently facing a temporary internal server issue. If the issue persists please email admin@yarndev.co.uk"
-        }
-        console.log(data);
+        `;
+    const result = await gemini.generateContent(text);
+    const response = await result.response;
+    if(!response){
+        console.log(result);
+        db.set(`Err:${Date.now()}`, result);    
         return 'Internal Server Error. Please try again later.';
     }
+    return response.text().trim;
 }
-var essay_params = {
-    "max_tokens": 1000,
-    "top_p":0.85,
-    "top_k":50,
-    "temperature": 0.8,
-    "repetition_penalty":1.3
-}
-var moderate_params = {
-"max_tokens":700,
-"top_p":0.87,
-"top_k":35,
-"temperature":0.75,
-"repetition_penalty":1.5
-}
-var precise_params ={
-"max_tokens":450,
-"top_p":0.9,
-"top_k":20,
-"temperature":0.5,
-"repetition_penalty":1.7
-}
+
+
 function getMessage(msg, prompt) {
     switch(msg){
         case '1':
-            return [`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "Introduction to markets and market failure" specification. The essay question should be in style of the following prompt: ${prompt}.`, essay_params];
+            return [`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "Introduction to markets and market failure" specification. The essay question should be in style of the following prompt: ${prompt}.`];
         case '2':
-            return [`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "The UK Economy: Performace and Policies" specification. The essay question should also be in relation to: ${prompt}.`, essay_params];
+            return [`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "The UK Economy: Performace and Policies" specification. The essay question should also be in relation to: ${prompt}.`];
         case '3':
-            return [`Write 5 25 mark essay questions in accordance with the AQA A Level History: Tsarist and Communist Russia specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the statements: "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`, essay_params];
+            return [`Write 5 25 mark essay questions in accordance with the AQA A Level History: Tsarist and Communist Russia specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the statements: "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`];
         case '4':
-            return [`Write 5 25 mark essay questions in accordance with the AQA A Level History: The English Revolution specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the response "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`, essay_params];
+            return [`Write 5 25 mark essay questions in accordance with the AQA A Level History: The English Revolution specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the response "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`];
         case '5':
-            return [`Write  5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}.`, precise_params];
+            return [`Write  5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}.`];
         case '6':
-            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`, precise_params];
+            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
         case '7':
-            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`, precise_params];
+            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
         case '8':
-            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`, precise_params];
+            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
         case '9':
-            return [`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Physical Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`, essay_params];
+            return [`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Physical Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '10':
-            return [`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Human Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`, essay_params];
+            return [`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Human Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '11':
-            return [`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Government Specification. The essay questions should be in relation to the following prompt: ${prompt}.`, essay_params];
+            return [`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Government Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '12':
-            return [`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Politics Specification. The essay questions should be in relation to the following prompt: ${prompt}.`, essay_params];
+            return [`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Politics Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '13':
-            return [`Write 2 10, 2 15 and 1 30 mark essay question in accordance with the OCR A Level Media: Evolving Media specification. The essay questions should be in relation to the following prompt: ${prompt}.`, essay_params];
+            return [`Write 2 10, 2 15 and 1 30 mark essay question in accordance with the OCR A Level Media: Evolving Media specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '14':
-            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the AQA A Level Biology Specification. The questions should be in relation to the following prompt: ${prompt}.`, moderate_params];
+            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the AQA A Level Biology Specification. The questions should be in relation to the following prompt: ${prompt}.`];
         case '15':
-            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Inorganic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`, precise_params];
+            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Inorganic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`];
         case '16':
-            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`, precise_params];
+            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`];
     }
 }
 

@@ -1,0 +1,5 @@
+{
+    "discord.detailsEditing": "✏️· Editing {file_name} - {current_line}/{total_lines}",
+    "discord.lowerDetailsEditing": "📃· {workspace}",
+    "discord.lowerDetailsIdling": "💤Idling"
+}
