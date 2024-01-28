@@ -12,5 +12,5 @@
           "dest": "/server.js"
       }
   ],
-  "installCommand": "npm install"
+  "installCommand": "npm install @google/generative-ai @keyv/mysql keyv express express-openid-connect express-session node-fetch passport passport-auth0 tailwindcss-labeled-groups dotenv"
 }
