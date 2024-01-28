@@ -5,8 +5,10 @@ const { auth, requiresAuth } = require('express-openid-connect');
 const port =  process.env.PORT || 3000;
 require('dotenv').config();
 const path = require('path');
-const keyv = require('keyv');
-const db = new keyv(process.env.mysql);
+const keyvmysql = require('@keyv/mysql');
+const db = new keyvmysql(process.env.mysql, {
+    table: 'users',
+});
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.key);
 const gemini = genAI.getGenerativeModel({model:  "gemini-pro"});
