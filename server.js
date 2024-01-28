@@ -35,6 +35,18 @@ app.get('/', (req, res) => {
     res.render(path.join(__dirname + '/public/views/index.ejs'));
 })
 app.get('/gen', requiresAuth(), async (req, res) => {
+const countdown = new Date("5 February, 2024 00:00:00").getTime(),
+    now = new Date().getTime(),
+    distance = countdown - now;
+    if (distance < 0) {
+      res.render(path.join(__dirname + '/public/views/gen.ejs'), {
+          user: req.oidc.user,
+          db: db
+      }); 
+    }
+    else {
+      res.render(path.join(__dirname + '/public/views/countdown.ejs'));
+    }
     let profile = await db.get(`user:${req.oidc.user.sid}`) ? db.get(`user:${req.oidc.user.sid}`)  : null;
     if (profile) {
         const reset_time = await db.get(profile).gen_refresh ? db.get(profile).gen_refresh : 0;
@@ -53,10 +65,8 @@ app.get('/gen', requiresAuth(), async (req, res) => {
         free_gens:10
     });
   }
-    res.render(path.join(__dirname + '/public/views/gen.ejs'), {
-        user: req.oidc.user,
-        db: db
-    }); 
+
+
 });
   // Defined routes
 app.post(`/generate-question`, async (req, res) => {
