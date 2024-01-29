@@ -36,6 +36,9 @@ app.set("views", path.join(__dirname, "views"));
 app.get('/', (req, res) => {
     res.render(path.join(__dirname + '/public/views/index.ejs'));
 })
+app.get('/countdown', (req, res) => {
+    res.render(path.join(__dirname + '/public/views/countdown.ejs'));
+});
 app.get('/gen', requiresAuth(), async (req, res) => {
 const countdown = new Date("5 February, 2024 00:00:00").getTime(),
     now = new Date().getTime(),
