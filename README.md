@@ -12,3 +12,14 @@ To use QGenie, simply go to [qgenie.co.uk](qgenie.co.uk)!
 
 ## Issues
 Any issues can be reported either via email or in the [issues](https://github.com/aspekts/qgenie/issues) section.
+
+## TBD
+
+- [x] MySQL DB + Keyv Integration
+- [x] Free Generation/day timer
+- [x] EJS Migration
+- [x] Import Prompts to DB
+- [ ] Dashboard
+- [ ] Resolve MathJax Occassional Loading
+- [ ] Stripe/Payment Integration
+- [ ] Revamped UI for Gen
