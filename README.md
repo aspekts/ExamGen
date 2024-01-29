@@ -18,7 +18,7 @@ Any issues can be reported either via email or in the [issues](https://github.co
 - [x] MySQL DB + Keyv Integration
 - [x] Free Generation/day timer
 - [x] EJS Migration
-- [ ] Import Prompts to DB
+- [x] Import Prompts to DB
 - [ ] Dashboard
 - [ ] Resolve MathJax Occassional Loading
 - [ ] Stripe/Payment Integration
