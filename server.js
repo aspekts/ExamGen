@@ -104,6 +104,7 @@ async function generateQuestion(value, prompt) {
         `;
     const result = await gemini.generateContent(text);
     const response = await result.response;
+    console.log(`${result}\n${response}`);
     if(!response){
         console.log(result);
         db.set(`Err:${Date.now()}`, result);    
