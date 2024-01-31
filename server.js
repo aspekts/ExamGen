@@ -10,6 +10,7 @@ const keyvmysql = require('@keyv/mysql');
 var db = new keyvmysql(process.env.mysql, {
     namespace: 'main',
     table: 'users',
+    ttl: 60 * 60 * 24,
     ssl: {
         rejectUnauthorized:true, 
     }
