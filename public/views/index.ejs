@@ -5,18 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>QGenie - Your personal exam question generator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.4/dist/tailwind.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
     <link rel="icon" href="./assets/new/QTP.svg" />
     <link rel="stylesheet" href="./home.css">
   </head>
   <body class="bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
-      <!-- Logo -->
-      <div class="flex justify-center">
-        <a href="#"><img src="./assets/new/QTP.svg" alt="QGenie logo" class="h-20 w-48" />
-        <img src="./assets/new/GenieYellow.svg" alt="QGenie logo" class="h-20 w-48"/></a>
+    <nav class="navbarmenu sticky bg-white h-20 mt-4">
+      <div class="container mx-auto flex justify-between items-center">
+      <img src="../assets/new/QGL.svg" class="size-24 mr-2" alt="Tailwindcss Navigation">
+
+      <ul class="hidden md:flex space-x-6">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">News</a></li>
+        <li><a href="#" class="mr-1">Services</a> </li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+
+      <a href="#" class="bg-yellow-400 px-5 py-1 rounded-3xl hover:bg-yellow-500 text-white hidden md:flex" role="button">Sign In</a>
+    <script>
+      const mobile_icon = document.getElementById('mobile-icon');
+const mobile_menu = document.getElementById('mobile-menu');
+const hamburger_icon = document.querySelector("#mobile-icon i");
+
+function openCloseMenu() {
+  mobile_menu.classList.toggle('block');
+  mobile_menu.classList.toggle('active');
+}
+
+function changeIcon(icon) {
+  icon.classList.toggle("fa-xmark");
+}
+
+mobile_icon.addEventListener('click', openCloseMenu);
+
+
+    </script>
+    <!-- Mobile menu icon -->
+    <button id="mobile-icon" class="md:hidden">
+      <i onclick="changeIcon(this)" class="fa-solid fa-bars"></i>
+    </button>
+    
+    </div>
+  
+  <!-- Mobile menu -->
+  <div class="md:hidden flex justify-center mt-3 w-full">
+    <div id="mobile-menu" class="mobile-menu absolute top-23 w-full"> <!-- add hidden here later -->
+      <ul class="bg-gray-100 shadow-lg leading-9 font-bold h-screen">
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="https://google.com" class="block pl-7">Home</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">News</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white"><a href="#" class="block pl-11">Services</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">About</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">Contact</a></li>
+      </ul>
       </div>
+  </div>
+</nav>
+
       <!-- Heading -->
       <h1 class="text-4xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-pink-500 text-center mt-8 pb-4">
         QGenie - Your <span

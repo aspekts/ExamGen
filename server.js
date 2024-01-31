@@ -5,14 +5,19 @@ const { auth, requiresAuth } = require('express-openid-connect');
 const port =  process.env.PORT || 3000;
 require('dotenv').config();
 const path = require('path');
+const fs = require('fs');
 const keyvmysql = require('@keyv/mysql');
-const db = new keyvmysql(process.env.mysql, {
+var db = new keyvmysql(process.env.mysql, {
+    namespace: 'main',
     table: 'users',
-});
+    ssl: {
+        rejectUnauthorized:true, 
+    }
+})
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.key);
 const gemini = genAI.getGenerativeModel({model:  "gemini-pro"});
-db.on('error', err => console.log('Connection Error', err));
+db.on('error', err => console.log('[MAIN]: Error:', err));
 /**
  * App Configuration
 */
@@ -40,38 +45,34 @@ app.get('/countdown', (req, res) => {
     res.render(path.join(__dirname + '/public/views/countdown.ejs'));
 });
 app.get('/gen', requiresAuth(), async (req, res) => {
-const countdown = new Date("5 February, 2024 00:00:00").getTime(),
-    now = new Date().getTime(),
-    distance = countdown - now;
-    if (distance < 0) {
-      res.render(path.join(__dirname + '/public/views/gen.ejs'), {
-          user: req.oidc.user,
-          db: db
-      }); 
-    }
-    else {
-      res.render(path.join(__dirname + '/public/views/countdown.ejs'));
-    }
+
     let profile = await db.get(`user:${req.oidc.user.sid}`) ? db.get(`user:${req.oidc.user.sid}`)  : null;
     if (profile) {
         const reset_time = await db.get(profile).gen_refresh ? db.get(profile).gen_refresh : 0;
         if(Date.now() > reset_time) await setDB();
     }
-   else await setDB();
-    next();
+   else {
+    await setDB();
+    profile = await db.get(`user:${req.oidc.user.sid}`);
+   }
 
-  async function setDB() {
+    res.render(path.join(__dirname + '/public/views/gen.ejs'), {
+        user: req.oidc.user,
+        profile: profile,
+        premium: profile ? profile.premium !== 0 : false,
+        db: db
+    });
     const currentDate = new Date();
-    await db.set(`user:${req.oidc.user.sid}`, {
+    var profile_obj = {
         user:req.oidc.user,
-        premium: false,
+        premium: 0,
         premiumExpiry: null,
         gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0),
         free_gens:10
-    });
+    }
+  async function setDB() {
+    await db.set(`user:${req.oidc.user.sid}`, profile_obj);
   }
-
-
 });
   // Defined routes
 app.post(`/generate-question`, async (req, res) => {
