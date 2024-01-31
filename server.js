@@ -103,8 +103,8 @@ async function generateQuestion(value, prompt) {
         ${getMessage(value, prompt)[0]}
         `;
     const result = await gemini.generateContent(text);
+    console.log(result);
     const response = await result.response;
-    console.log(`${JSON.stringify(result)}\n${JSON.stringify(response)}`);
     if(!response){
         console.log(result);
         db.set(`Err:${Date.now()}`, result);    
