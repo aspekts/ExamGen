@@ -15,9 +15,22 @@ var db = new keyvmysql(process.env.mysql, {
         rejectUnauthorized:true, 
     }
 })
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI(process.env.key);
-const gemini = genAI.getGenerativeModel({model:  "gemini-pro"});
+const {VertexAI} = require('@google-cloud/vertexai');
+const vertex_ai = new VertexAI({project: 'global-shard-402113', location: 'us-central1'});
+const model = 'gemini-pro';
+
+// Instantiate the models
+const generativeModel = vertex_ai.preview.getGenerativeModel({
+  model: model,
+  generation_config: {
+    "max_output_tokens": 2048,
+    "temperature": 0.4,
+    "top_p": 1,
+    "top_k": 32
+},
+  safety_settings: [],
+});
+
 db.on('error', err => console.log('[MAIN]: Error:', err));
 /**
  * App Configuration
@@ -88,7 +101,9 @@ app.post(`/generate-question`, async (req, res) => {
 });
 
 async function generateQuestion(value, prompt) {
+ 
     const text = `
+
         You are a language model that provides correct and detailed exam style questions, in order, in accordance with a specific subject's specification. Put the question number then mention the question explicitly, as well as the marks, and then in the next line "Ans: " and Answer.
         Output format:
        <Question Number>. <Question> [<Marks>]
@@ -102,15 +117,24 @@ async function generateQuestion(value, prompt) {
         For this prompt specifically:
         ${getMessage(value, prompt)[0]}
         `;
-    const result = await gemini.generateContent(text);
-    console.log(result);
-    const response = await result.response;
-    if(!response){
-        console.log(result);
-        db.set(`Err:${Date.now()}`, result);    
-        return 'Internal Server Error. Please try again later.';
-    }
-    return response.text().trim;
+       const response= await fetch(process.env.url, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.OR_API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              "model": "google/gemini-pro", // Optional (user controls the default),
+              "messages": [
+                {"role": "user", "content": text },
+              ]
+            })
+          });
+          if(!response.ok) {
+            throw new Error(response.statusText);
+          }
+          const result = await response.json();
+          return result.choices[0].message.content;
 }
 
 
