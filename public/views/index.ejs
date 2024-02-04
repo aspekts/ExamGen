@@ -13,8 +13,8 @@
     <link rel="icon" href="./assets/new/QTP.svg" />
     <link rel="stylesheet" href="./home.css">
   </head>
-  <body class="bg-gray-900 mx-8">
-    <nav class="navbarmenu sticky bg-white bg-opacity-50 mt-5 top-0 md:h-18">
+  <body class="bg-gray-900 mx-8 mt-5">
+    <nav class="navbarmenu pt-4 bg-white mt-5 top-0 md:h-18 shadow-xl">
       <div class="container flex justify-between items-center sticky  px-8 mx-auto md:flex">
       <img src="../assets/new/QGL.svg" class="size-24 my-auto" alt="Tailwindcss Navigation">
 
@@ -26,7 +26,7 @@
         <li><a href="#" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Contact</a></li>
       </ul>
 
-      <a href="#" class="bg-yellow-400 mr-2 px-5 py-1 rounded-3xl hover:bg-yellow-500 text-white hidden md:flex" role="button">Sign In</a>
+      <a href="/gen" class="bg-yellow-400 mr-2 px-5 py-1 rounded-3xl hover:bg-yellow-500 text-white hidden md:flex" role="button">Sign In</a>
 
     <!-- Mobile menu icon -->
     <button id="mobile-icon" class="md:hidden">
@@ -36,14 +36,14 @@
     </div>    
   
   <!-- Mobile menu -->
-  <div class="md:hidden flex justify-center bg-gray-300 bg-opacity-50 mt-3 w-full">
+  <div class="md:hidden flex justify-center bg-gray-300 bg-opacity-50 mt-3 rounded-full w-full">
     <div id="mobile-menu" class="mobile-menu absolute top-23 w-full rounded-full"> <!-- add hidden here later -->
       <ul class="bg-gray-100 shadow-lg leading-9 font-bold h-screen">
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">Home</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7" onclick="smoothScroll(document.getElementById('features'))">Features</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white"><a href="#" class="block pl-11" onclick="smoothScroll(document.getElementById('testimonials'))">Testimonials</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7" onclick="smoothScroll(document.getElementById('pricing'))">Pricing</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7" onclick="smoothScroll(document.getElementById('contact'))">Contact</a></li>
+        <li><a href="#" class="text-black rounded-full">Home</a></li>
+        <li><a href="#"class="text-black rounded-full onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">Features</a></li>
+        <li><a href="#"class="text-black rounded-full onclick="document.getElementById('testimonials').scrollIntoView({behavior: 'smooth'})">Testimonials</a> </li>
+        <li><a href="#"class="text-black rounded-full onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">Pricing</a></li>
+        <li><a href="#"class="text-black rounded-full onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Contact</a></li>
       </ul>
       </div>
   </div>
@@ -181,84 +181,61 @@ mobile_icon.addEventListener('click', openCloseMenu);
         <!-- Block #1 -->
         <article class="p-6">
             <div class="w-14 h-14 rounded shadow-md bg-white flex justify-center items-center rotate-3 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="20">
-                    <defs>
-                        <linearGradient id="icon1-a" x1="50%" x2="50%" y1="0%" y2="100%">
-                            <stop offset="0%" stop-color="#A5B4FC" />
-                            <stop offset="100%" stop-color="#4F46E5" />
-                        </linearGradient>
-                        <linearGradient id="icon1-b" x1="50%" x2="50%" y1="0%" y2="100%">
-                            <stop offset="0%" stop-color="#EEF2FF" />
-                            <stop offset="100%" stop-color="#C7D2FE" />
-                        </linearGradient>
-                    </defs>
-                    <g fill="none" fill-rule="nonzero">
-                        <path fill="url(#icon1-a)" d="M20.625 0H9.375a9.375 9.375 0 0 0 0 18.75h11.25a9.375 9.375 0 0 0 0-18.75Z" transform="translate(.885 .885)" />
-                        <path fill="url(#icon1-b)" d="M9.375 17.5A8.125 8.125 0 0 1 1.25 9.375 8.125 8.125 0 0 1 9.375 1.25 8.125 8.125 0 0 1 17.5 9.375 8.125 8.125 0 0 1 9.375 17.5Z" transform="translate(.885 .885)" />
-                    </g>
-                </svg>
+<svg  viewBox="0 0 2050 2050" data-name="Layer 2" id="Layer_2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" class="fill-yellow-400"><defs><style>.cls-1{fill:#f4c23f;}.cls-2{fill:#f4a93f;}.cls-3{fill:#67baeb;}.cls-4{fill:#46a1f8;}.cls-5{fill:#4d4c78;}.cls-6{fill:#323150;}.cls-7{fill:#de3226;}.cls-8{fill:#231f20;}.cls-9{fill:#b9b1e0;}.cls-10{fill:#b11a31;}.cls-11{fill:#b1a9d6;}.cls-12{fill:#83d0fb;}.cls-13{fill:#fad564;}.cls-14{fill:#f44533;}.cls-15{fill:#64639c;}</style></defs><title/><rect class="cls-1" height="1647.4" rx="88.2" ry="88.2" width="1212.7" x="640" y="209.3"/><path class="cls-2" d="M1826,1773.5H789.8a88.2,88.2,0,0,1-88.2-88.2V213.4A88.3,88.3,0,0,0,640,297.5V1768.4a88.3,88.3,0,0,0,88.3,88.3H1764.5a88.2,88.2,0,0,0,88.2-87.3A87.2,87.2,0,0,1,1826,1773.5Z"/><path class="cls-3" d="M880.2,209.3H728.3A88.2,88.2,0,0,0,640,297.5V1768.4a88.3,88.3,0,0,0,88.3,88.3H880.2Z"/><path class="cls-4" d="M789.8,1773.5a88.2,88.2,0,0,1-88.2-88.2V213.4A88.3,88.3,0,0,0,640,297.5V1768.4a88.3,88.3,0,0,0,88.3,88.3H880.2v-83.2Z"/><path class="cls-5" d="M757.1,572.9H591.7a59.5,59.5,0,0,1,0-119H757.1a59.5,59.5,0,0,1,0,119Z"/><path class="cls-5" d="M757.1,919.3H591.7a59.5,59.5,0,0,1,0-119H757.1a59.5,59.5,0,1,1,0,119Z"/><path class="cls-5" d="M757.1,1265.7H591.7a59.5,59.5,0,0,1,0-119H757.1a59.5,59.5,0,1,1,0,119Z"/><path class="cls-5" d="M757.1,1612.1H591.7a59.5,59.5,0,0,1,0-119H757.1a59.5,59.5,0,0,1,0,119Z"/><path class="cls-6" d="M805.3,534H639.9a59.6,59.6,0,0,1-59.5-59.5,58.2,58.2,0,0,1,3.5-20.1,59.5,59.5,0,0,0,7.8,118.5H757.1a59.5,59.5,0,0,0,56-39.5A50.3,50.3,0,0,1,805.3,534Z"/><path class="cls-6" d="M805.3,880.4H639.9a59.6,59.6,0,0,1-59.5-59.5,58.2,58.2,0,0,1,3.5-20.1,59.5,59.5,0,0,0,7.8,118.5H757.1a59.5,59.5,0,0,0,56-39.5A50.3,50.3,0,0,1,805.3,880.4Z"/><path class="cls-6" d="M805.3,1226.8H639.9a59.6,59.6,0,0,1-59.5-59.5,58.6,58.6,0,0,1,3.5-20.1,59.5,59.5,0,0,0,7.8,118.5H757.1a59.6,59.6,0,0,0,56-39.4A66.6,66.6,0,0,1,805.3,1226.8Z"/><path class="cls-6" d="M805.3,1573.2H639.9a59.6,59.6,0,0,1-59.5-59.5,58.6,58.6,0,0,1,3.5-20.1,59.5,59.5,0,0,0,7.8,118.5H757.1a59.6,59.6,0,0,0,56-39.4A66.6,66.6,0,0,1,805.3,1573.2Z"/><path class="cls-5" d="M1615.4,464.6H1035.3a20,20,0,0,1,0-40h580.1a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1487.6,629.7H1035.3a20,20,0,0,1,0-40h452.3a20,20,0,0,1,0,40Z"/><polygon class="cls-3" points="197.3 442.9 197.3 1591.6 417.6 1591.6 417.6 452.1 197.3 452.1 197.3 442.9"/><path class="cls-7" d="M417.6,303.5A110.2,110.2,0,0,0,307.4,193.3h0A110.1,110.1,0,0,0,197.3,303.5v63.6H417.6Z"/><rect class="cls-8" height="84.93" x="417.6" y="367.1"/><polygon class="cls-8" points="197.3 442.9 197.3 367.1 197.3 367.1 197.3 442.9"/><polygon class="cls-1" points="197.3 452.1 417.6 452.1 417.6 367.1 197.3 367.1 197.3 442.9 197.3 452.1"/><path class="cls-9" d="M197.3,1591.6H417.6l-89.1,201.9c-8.1,18.3-34.1,18.3-42.2,0Z"/><polygon class="cls-4" points="197.3 1591.6 255.3 1591.6 255.3 452.1 197.3 452.1 197.3 442.9 197.3 1591.6"/><path class="cls-10" d="M417.6,367.1H255.3V303.5a110.2,110.2,0,0,1,81.1-106.3,110.3,110.3,0,0,0-29-3.9h0A110.1,110.1,0,0,0,197.3,303.5v63.6Z"/><polygon class="cls-2" points="255.3 452.1 255.3 442.9 255.3 367.1 197.3 367.1 197.3 442.9 197.3 452.1 255.3 452.1"/><path class="cls-11" d="M328.5,1793.5l7.9-18-81.1-183.9h-58l89,201.9C294.4,1811.8,320.4,1811.8,328.5,1793.5Z"/><path class="cls-5" d="M293.3,723.5a19.9,19.9,0,0,1,34.1,14.1v691.2a20,20,0,0,1-40,0V737.6A20,20,0,0,1,293.3,723.5Z"/><path class="cls-5" d="M293.3,565.7a20,20,0,0,1,34.1,14.2v74.6a20,20,0,0,1-40,0V579.9A20.4,20.4,0,0,1,293.3,565.7Z"/><rect class="cls-12" height="278.37" rx="24.6" ry="24.6" transform="translate(785.4 2311.6) rotate(-180)" width="49.1" x="368.1" y="1016.6"/><rect class="cls-12" height="106.15" rx="24.6" ry="24.6" transform="translate(785.4 1822.4) rotate(-180)" width="49.1" x="368.1" y="858.1"/><rect class="cls-13" height="61.1" rx="24.6" ry="24.6" transform="translate(785.4 826.1) rotate(-180)" width="49.1" x="368.1" y="382.5"/><rect class="cls-14" height="107.2" rx="24.6" ry="24.6" transform="translate(779.4 628.4) rotate(-180)" width="49.1" x="365.1" y="260.6"/><rect class="cls-12" height="682.74" rx="19.8" ry="19.8" width="39.6" x="840.6" y="600.3"/><rect class="cls-15" height="45.42" rx="22.7" ry="22.7" width="136.4" x="644.2" y="453.9"/><rect class="cls-15" height="45.42" rx="22.7" ry="22.7" width="136.4" x="644.2" y="800.3"/><rect class="cls-15" height="45.42" rx="22.7" ry="22.7" width="136.4" x="644.2" y="1146.7"/><rect class="cls-15" height="45.42" rx="22.7" ry="22.7" width="136.4" x="644.2" y="1493.1"/><rect class="cls-13" height="952.93" rx="32.8" ry="32.8" width="65.5" x="1787.2" y="600.3"/><rect class="cls-13" height="47.93" rx="24" ry="24" width="400.8" x="1320.6" y="209.3"/></svg>
             </div>
             <h2>
-                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:40]'">
-                    <span class="supports-[counter-set]:sr-only">40</span>K+
+                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:20]'">
+                    <span class="supports-[counter-set]:sr-only">20</span>+
                 </span>
-                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Variations</span>
+                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Subjects</span>
             </h2>
-            <p class="text-sm text-slate-500">Many desktop publishing packages and web page editors now use Pinky as their default model text.</p>
+            <p class="text-sm text-slate-500">Ranging from quantitative subjects such as Maths, and Physics, to more creative, essay based subjects such as History and Politics.</p>
         </article>
         <!-- Block #2 -->
         <article class="p-6">
             <div class="w-14 h-14 rounded shadow-md bg-white flex justify-center items-center -rotate-3 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="19">
-                    <defs>
-                        <linearGradient id="icon2-a" x1="50%" x2="50%" y1="0%" y2="100%">
-                            <stop offset="0%" stop-color="#A5B4FC" />
-                            <stop offset="100%" stop-color="#4F46E5" />
-                        </linearGradient>
-                        <linearGradient id="icon2-b" x1="50%" x2="50%" y1="0%" y2="100%">
-                            <stop offset="0%" stop-color="#E0E7FF" />
-                            <stop offset="100%" stop-color="#A5B4FC" />
-                        </linearGradient>
-                    </defs>
-                    <g fill="none" fill-rule="nonzero">
-                        <path fill="url(#icon2-a)" d="M5.5 0a5.5 5.5 0 0 0 0 11c.159 0 .314-.01.469-.024a15.896 15.896 0 0 1-2.393 6.759A.5.5 0 0 0 4 18.5h1a.5.5 0 0 0 .362-.155C7.934 15.64 11 11.215 11 5.5A5.506 5.506 0 0 0 5.5 0Z" />
-                        <path fill="url(#icon2-b)" d="M18.5 0a5.5 5.5 0 0 0 0 11c.159 0 .314-.01.469-.024a15.896 15.896 0 0 1-2.393 6.759.5.5 0 0 0 .424.765h1a.5.5 0 0 0 .363-.155C20.934 15.64 24 11.215 24 5.5A5.506 5.506 0 0 0 18.5 0Z" />
-                    </g>
-                </svg>
+              <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+              viewBox="0 0 60 60" xml:space="preserve" width="25" height="25" class="fill-yellow-600">
+           <g>
+             <g>
+               <path d="M53,12c0-0.1,0-0.2-0.1-0.3v-0.1c-0.1-0.1-0.1-0.2-0.2-0.3l-11-11c-0.1-0.1-0.2-0.1-0.3-0.2h-0.1C41.2,0.1,41.1,0,41,0
+                 l0,0H8C7.4,0,7,0.4,7,1v58c0,0.6,0.4,1,1,1h5h6h5h9h19c0.6,0,1-0.4,1-1V12L53,12z M49.6,11H42V3.4L49.6,11z M14,23h4v29h-4V23z
+                  M14.5,21l1.5-3.5l1.5,3.5H14.5z M14,58v-4h4v4H14z M25,58v-6h4v-2h-4v-6h4v-2h-4v-7h4v-2h-4v-6h4v-2h-4v-5h7v38H25z M34,58V19
+                 c0-0.6-0.4-1-1-1h-9c-0.6,0-1,0.4-1,1v39h-3v-5V22c0-0.3-0.1-0.6-0.3-0.7l-2.8-6.6c-0.1-0.4-0.5-0.6-0.9-0.6s-0.7,0.2-0.9,0.6
+                 l-2.8,6.6C12.1,21.5,12,21.7,12,22v31v5H9V2h31v10c0,0.6,0.4,1,1,1h10v45H34z"/>
+               <rect x="12" y="5" width="8" height="2"/>
+               <rect x="38" y="22" width="9" height="2"/>
+               <rect x="38" y="27" width="9" height="2"/>
+               <rect x="38" y="32" width="9" height="2"/>
+               <rect x="38" y="37" width="9" height="2"/>
+               <rect x="38" y="42" width="9" height="2"/>
+               <rect x="38" y="47" width="9" height="2"/>
+               <rect x="38" y="52" width="9" height="2"/>
+               <rect x="12" y="9" width="16" height="2"/>
+             </g>
+           </g>
+           </svg>
             </div>
             <h2>
                 <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:70]'">
-                    <span class="supports-[counter-set]:sr-only">70</span>K+
+                    <span class="supports-[counter-set]:sr-only">70</span>+
                 </span>
-                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Lessons</span>
+                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Topics</span>
             </h2>
-            <p class="text-sm text-slate-500">Many desktop publishing packages and web page editors now use Pinky as their default model text.</p>
+            <p class="text-sm text-slate-500">Covers every single topic within each subject's specification to make sure your revision has no gaps.</p>
         </article>
         <!-- Block #3 -->
         <article class="p-6">
             <div class="w-14 h-14 rounded shadow-md bg-white flex justify-center items-center rotate-3 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-                    <defs>
-                        <radialGradient id="icon3-a" cx="68.15%" cy="27.232%" r="67.641%" fx="68.15%" fy="27.232%">
-                            <stop offset="0%" stop-color="#E0E7FF" />
-                            <stop offset="100%" stop-color="#A5B4FC" />
-                        </radialGradient>
-                    </defs>
-                    <g fill="none" fill-rule="nonzero">
-                        <circle cx="13" cy="13" r="13" fill="url(#icon3-a)" />
-                        <path fill="#4F46E5" fill-opacity=".56" d="M0 13a12.966 12.966 0 0 0 4.39 9.737l1.15-1.722s.82-.237.997-.555c.554-.997-.43-2.733-.43-2.733a5.637 5.637 0 0 0-.198-1.23c-.148-.369-1.182-.874-1.182-.874S3.73 13.998 3.73 13a1.487 1.487 0 0 1 1.404-1.55 2.424 2.424 0 0 0 1.588-1.146s1.256-.332 1.551-.847c.295-.515-.332-2.36-.332-2.36a3.086 3.086 0 0 0-.012-1.481 2.8 2.8 0 0 0-.93-1.12 6.143 6.143 0 0 0-1.447-2.148A12.981 12.981 0 0 0 0 13ZM13 0c-.35 0-.696.018-1.04.045-.112.35-.695 1.248-.548 1.653.147.406 1.353.783 1.353.783s-.32 1.25.235 1.692c.554.443 1.44-.148 1.773-.037.331.111.258 2.29.258 2.29s1.07 1.181 2.124 1.33c1.053.147 2.656-1.64 2.656-1.64a21.131 21.131 0 0 0 3.448-1.102A12.974 12.974 0 0 0 13 0Z" />
-                        <path fill="#6366F1" fill-opacity=".4" d="M21.398 13.848c.296.702-.555 2.494-1.256 2.843a4.76 4.76 0 0 0-1.82 1.452c-.259.406-.598 2.082-1.447 2.415-.85.332-2.863 2.228-3.934 1.932-1.071-.296-1.071-2.842-.333-3.988.441-.683-.074-2.179-.113-2.695-.039-.517-1.586-1.478-1.586-1.994 0-.813 1.772-2.955 1.772-2.955s1.453-.48 1.896-.37c.448.164.877.374 1.28.628.782.058 1.552.22 2.29.48l.848.775s2.107.777 2.403 1.477Z" />
-                    </g>
-                </svg>
-    
+<svg viewBox="0 0 2050 2050" data-name="Layer 2" id="Layer_2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" class="fill-yellow-400"><defs><style>.cls-1{fill:#323150;}.cls-2{fill:#4d4c78;}.cls-3{fill:#46a1f8;}.cls-4{fill:#67baeb;}.cls-5{fill:#c8c2e9;}.cls-6{fill:#64639c;}</style></defs><title/><path class="cls-1" d="M1211.2,1712.7V1625h98.5v174.7a119,119,0,0,1-119.1,119H466.3a119,119,0,0,1-114.1-84.8h737.9A121.2,121.2,0,0,0,1211.2,1712.7Z"/><path class="cls-2" d="M347.2,1625h864v87.7a121.2,121.2,0,0,1-121.1,121.2H352.2a120.9,120.9,0,0,1-5-34.2Z"/><path class="cls-1" d="M1211.2,228.9a120.8,120.8,0,0,0-49.5-97.6h28.9a119,119,0,0,1,119.1,119v88.8h-98.5Z"/><path class="cls-2" d="M1211.2,228.9V339.1h-864V250.3a119,119,0,0,1,119.1-119h695.4A120.8,120.8,0,0,1,1211.2,228.9Z"/><rect class="cls-3" height="1285.9" width="98.5" x="1211.2" y="339.1"/><rect class="cls-4" height="1285.9" width="864" x="347.2" y="339.1"/><circle class="cls-1" cx="844.3" cy="1787.3" r="72.8"/><circle class="cls-5" cx="828.5" cy="1774.4" r="65.9"/><rect class="cls-6" height="106.96" rx="53.5" ry="53.5" transform="translate(1152.5 369.5) rotate(180)" width="260.8" x="445.9" y="131.3"/><rect class="cls-6" height="106.96" rx="53.5" ry="53.5" transform="translate(1033.6 3356.9) rotate(-180)" width="260.8" x="386.4" y="1625"/><path class="cls-2" d="M1276.7,1359.6H828.5V676h407.9a78.3,78.3,0,0,1,78.2,78.3v643.2h0A37.9,37.9,0,0,0,1276.7,1359.6Z"/><path class="cls-1" d="M884.9,1320.3V676H828.5v683.6h448.2a37.9,37.9,0,0,1,37.9,37.9v-77.2Z"/><path class="cls-2" d="M1352.5,1359.6h448.3V676H1392.9a78.4,78.4,0,0,0-78.3,78.3v643.2h0A37.9,37.9,0,0,1,1352.5,1359.6Z"/><path class="cls-1" d="M1370.2,1303.7v-605a78.6,78.6,0,0,1,2.7-20.1,78.3,78.3,0,0,0-58.3,75.7v643.2a37.9,37.9,0,0,1,37.9-37.9h448.3V1304Z"/><path class="cls-5" d="M1195.3,839H947.8a20,20,0,0,1,0-40h247.5a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1195.3,961.7H947.8a20,20,0,0,1,0-40h247.5a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1195.3,1084.4H947.8a20,20,0,0,1,0-40h247.5a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1195.3,1207.1H947.8a20,20,0,1,1,0-40h247.5a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1681.4,839H1434a20,20,0,0,1,0-40h247.4a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1681.4,961.7H1434a20,20,0,0,1,0-40h247.4a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1681.4,1084.4H1434a20,20,0,0,1,0-40h247.4a20,20,0,0,1,0,40Z"/><path class="cls-5" d="M1681.4,1207.1H1434a20,20,0,0,1,0-40h247.4a20,20,0,0,1,0,40Z"/></svg>
             </div>
             <h2>
-                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:149]'">
-                    <span class="supports-[counter-set]:sr-only">149</span>+
+                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:100]'">
+                    <span class="supports-[counter-set]:sr-only">100</span>+
                 </span>
-                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Workshops</span>
+                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Questions Generated</span>
             </h2>
-            <p class="text-sm text-slate-500">Many desktop publishing packages and web page editors now use Pinky as their default model text.</p>
+            <p class="text-sm text-slate-500">Rapidly increasing everyday!</p>
         </article>
     </section>
 
@@ -296,7 +273,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
        <h2 class="text-2xl font-bold text-gray-100 mb-8" id="pricing">Pricing</h2>
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
-            <div class="bg-white p-8 rounded-lg shadow">
+            <div class="bg-white text-center p-8 rounded-lg shadow">
               <h3 class="text-xl font-bold text-gray-800 mb-4">Basic</h3>
               <p class="text-gray-800 mb-4">Free</p>
               <ul class="text-gray-800">
@@ -346,7 +323,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
                   <span class="text">Access to model answers</span>
                 </li>
               </ul>
-                <button id="checkout-and-portal-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-2 px-4 rounded-full w-full" type="submit">Checkout</button>
+                <button id="checkout-and-portal-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-2 px-4 rounded-full w-5/6" type="submit">Checkout</button>
             </div>
           </div>
           <br>
@@ -374,7 +351,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
                   <span class="text">Access to model answers</span>
                 </li>
               </ul> 
-                <button id="checkout-and-portal-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 mb-4 mx-8 py-2 px-4 rounded-full w-full" type="submit">Checkout</button>
+                <button id="checkout-and-portal-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 mb-4 mx-8 py-2 px-4 rounded-full w-5/6" type="submit">Checkout</button>
               </div>
           </div>
         </div>
@@ -458,7 +435,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
     <div class="flex flex-wrap items-center md:justify-between justify-center">
       <div class="w-full md:w-4/12 px-4 mx-auto text-center">
         <div class="text-sm text-gray-100 font-semibold py-1">
-          Copyright © <span id="get-current-year">2023</span><a href="https://aspekts.dev/" class="text-blueGray-500 hover:text-gray-800" target="_blank"> Aspekts, associated with
+          Copyright © <span id="get-current-year">2024</span><a href="https://aspekts.dev/" class="text-blueGray-500 hover:text-gray-800" target="_blank"> Aspekts, associated with
           <a href="https://yarndev.co.uk/" class="text-blueGray-500 hover:text-blueGray-800">Yarn Development</a>.
         </div>
       </div>

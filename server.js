@@ -37,27 +37,6 @@ app.get('/countdown', (req, res) => {
     res.render(path.join(__dirname + '/public/views/countdown.ejs'));
 });
 app.get('/subscribe', requiresAuth(), async (req, res) => {
-    const profile = await checkProfile(req)
-
-    res.render(path.join(__dirname + '/public/views/subscribe.ejs'));
-})
-app.get('/gen', requiresAuth(), async (req, res) => {
-    // use supabase to check if profile (req.oidc.user.sid) exists. If so, check if generation refresh time has expired. If not, set the database in the "users" column.
-    let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-    if(profile.data) {
-        const reset_time = await profile.data.profile.gen_refresh ? profile.data.profile.gen_refresh : 0;
-        if(Date.now() > reset_time) {
-            await setDB();
-            console.log("Profile refreshed");
-        }
-    }
-    else {
-        await setDB();
-        profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-        console.log(profile)
-        console.log("Profile created: " + profile);
-    }
-
     async function setDB(){
         // set database with profile in users column, with the "profile_obj" data
         const currentDate = new Date();
@@ -79,8 +58,85 @@ app.get('/gen', requiresAuth(), async (req, res) => {
             .eq('uid', req.oidc.user.sid).select();
             if(error) console.log(error);
         console.log("Profile updated: " + JSON.stringify(data));
+        return;
     
      }
+     async function checkProfile(req){
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('uid', req.oidc.user.sid).single();
+        if(error) console.log(error);
+        if(data) {
+            const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
+            if(Date.now() > reset_time) {
+                await setDB();
+                console.log("Profile refreshed");
+            }
+        }
+        else {
+            await setDB();
+            profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
+            console.log(profile)
+            console.log("Profile created: " + profile);
+        }
+        return data;
+    
+    }
+
+    const profile = await checkProfile(req);
+
+    res.render(path.join(__dirname + '/public/views/subscribe.ejs'), {
+        profile: profile
+    });
+})
+app.get('/gen', requiresAuth(), async (req, res) => {
+    async function setDB(){
+        // set database with profile in users column, with the "profile_obj" data
+        const currentDate = new Date();
+        var profile_obj = {
+            user:req.oidc.user,
+            premium: 0,
+            premiumExpiry: null,
+            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
+            free_gens:10
+        }
+        const { data, error } = await supabase
+            .from('users')
+            .upsert(
+                [
+                    { "profile": profile_obj, "uid": req.oidc.user.sid },
+                ]
+                    )
+            .eq('uid', req.oidc.user.sid).select();
+            if(error) console.log(error);
+        console.log("Profile updated: " + JSON.stringify(data));
+        return;
+    
+     }
+     async function checkProfile(req){
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('uid', req.oidc.user.sid).single();
+        if(error) console.log(error);
+        if(data) {
+            const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
+            if(Date.now() > reset_time) {
+                await setDB();
+                console.log("Profile refreshed");
+            }
+        }
+        else {
+            await setDB();
+            profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
+            console.log(profile)
+            console.log("Profile created: " + profile);
+        }
+        return data;
+    
+    }
+    let profile = checkProfile(req);
 
 
     res.render(path.join(__dirname + '/public/views/gen.ejs'), {
@@ -157,7 +213,7 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            throw new Error(response.statusText);
+            throw new Error(`Error: ${response.status} ${response.statusText}` || response.statusText);
           }
           const result = await response.json();
           console.log(source);
@@ -169,8 +225,9 @@ async function generateQuestion(req,value, prompt) {
             profile.data.profile.free_gens -= 1;
             await supabase
             .from('users')
-            .upsert([{ "profile": profile.data }, { "uid": req.oidc.user.sid }])
+            .upsert([{ "profile": profile.data.profile, "uid": req.oidc.user.sid }], {ignoreDuplicates: false})
             .eq('uid', req.oidc.user.sid);
+            console.log("Profile updated to reduce free gens: " + JSON.stringify(profile));
           }
           else {
               return "You have run out of Free Generations! Please purchase QGenie Pro or Premium for Unlimited Generations!";
