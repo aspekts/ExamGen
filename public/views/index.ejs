@@ -6,63 +6,66 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>QGenie - Your personal exam question generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/12061f55da.js" crossorigin="anonymous"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="icon" href="./assets/new/QTP.svg" />
     <link rel="stylesheet" href="./home.css">
   </head>
-  <body class="bg-gray-900">
-    <nav class="navbarmenu sticky bg-white h-20 mt-5">
-      <div class="container mx-auto flex justify-between items-center">
-      <img src="../assets/new/QGL.svg" class="size-24 mr-2" alt="Tailwindcss Navigation">
+  <body class="bg-gray-900 mx-8">
+    <nav class="navbarmenu sticky bg-white bg-opacity-50 mt-5 top-0 md:h-18">
+      <div class="container flex justify-between items-center sticky  px-8 mx-auto md:flex">
+      <img src="../assets/new/QGL.svg" class="size-24 my-auto" alt="Tailwindcss Navigation">
 
-      <ul class="hidden md:flex space-x-6">
+      <ul class="hidden md:flex my-auto space-x-6">
         <li><a href="#">Home</a></li>
-        <li><a href="#">News</a></li>
-        <li><a href="#" class="mr-1">Services</a> </li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">Features</a></li>
+        <li><a href="#" onclick="document.getElementById('testimonials').scrollIntoView({behavior: 'smooth'})">Testimonials</a> </li>
+        <li><a href="#" onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">Pricing</a></li>
+        <li><a href="#" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Contact</a></li>
       </ul>
 
-      <a href="#" class="bg-yellow-400 px-5 py-1 rounded-3xl hover:bg-yellow-500 text-white hidden md:flex" role="button">Sign In</a>
-    <script>
-      const mobile_icon = document.getElementById('mobile-icon');
-const mobile_menu = document.getElementById('mobile-menu');
-const hamburger_icon = document.querySelector("#mobile-icon i");
+      <a href="#" class="bg-yellow-400 mr-2 px-5 py-1 rounded-3xl hover:bg-yellow-500 text-white hidden md:flex" role="button">Sign In</a>
 
-function openCloseMenu() {
-  mobile_menu.classList.toggle('block');
-  mobile_menu.classList.toggle('active');
-}
-
-function changeIcon(icon) {
-  icon.classList.toggle("fa-xmark");
-}
-
-mobile_icon.addEventListener('click', openCloseMenu);
-
-
-    </script>
     <!-- Mobile menu icon -->
     <button id="mobile-icon" class="md:hidden">
       <i onclick="changeIcon(this)" class="fa-solid fa-bars"></i>
     </button>
     
-    </div>
+    </div>    
   
   <!-- Mobile menu -->
-  <div class="md:hidden flex justify-center mt-3 w-full">
-    <div id="mobile-menu" class="mobile-menu absolute top-23 w-full"> <!-- add hidden here later -->
+  <div class="md:hidden flex justify-center bg-gray-300 bg-opacity-50 mt-3 w-full">
+    <div id="mobile-menu" class="mobile-menu absolute top-23 w-full rounded-full"> <!-- add hidden here later -->
       <ul class="bg-gray-100 shadow-lg leading-9 font-bold h-screen">
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="https://google.com" class="block pl-7">Home</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">News</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white"><a href="#" class="block pl-11">Services</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">About</a></li>
-        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">Contact</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7">Home</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7" onclick="smoothScroll(document.getElementById('features'))">Features</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white"><a href="#" class="block pl-11" onclick="smoothScroll(document.getElementById('testimonials'))">Testimonials</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7" onclick="smoothScroll(document.getElementById('pricing'))">Pricing</a></li>
+        <li class="border-b-2 border-white hover:bg-red-400 hover:text-white pl-4"><a href="#" class="block pl-7" onclick="smoothScroll(document.getElementById('contact'))">Contact</a></li>
       </ul>
       </div>
   </div>
 </nav>
+<script>
+  const mobile_icon = document.getElementById('mobile-icon');
+const mobile_menu = document.getElementById('mobile-menu');
+const hamburger_icon = document.querySelector("#mobile-icon i");
 
+function openCloseMenu() {
+mobile_menu.classList.toggle('block');
+mobile_menu.classList.toggle('active');
+}
+
+function changeIcon(icon) {
+icon.classList.toggle("fa-xmark");
+}
+
+mobile_icon.addEventListener('click', openCloseMenu);
+
+
+</script>
       <!-- Heading -->
       <h1 class="text-4xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-pink-500 text-center mt-8 pb-4">
         QGenie - Your <span
@@ -148,7 +151,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
       <% } %>
       <!-- Features -->
       <div class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-100 mb-8">Features</h2>
+        <h2 class="text-2xl font-bold text-gray-100 mb-8" id="features">Features</h2>
 
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
@@ -173,10 +176,95 @@ mobile_icon.addEventListener('click', openCloseMenu);
           </div>
         </div>
       </div>
+      <!-- Stats-->
+      <section class="grid gap-12 md:grid-cols-3 md:gap-16 bg-white rounded-lg shadow mt-4 mb-2">
+        <!-- Block #1 -->
+        <article class="p-6">
+            <div class="w-14 h-14 rounded shadow-md bg-white flex justify-center items-center rotate-3 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="20">
+                    <defs>
+                        <linearGradient id="icon1-a" x1="50%" x2="50%" y1="0%" y2="100%">
+                            <stop offset="0%" stop-color="#A5B4FC" />
+                            <stop offset="100%" stop-color="#4F46E5" />
+                        </linearGradient>
+                        <linearGradient id="icon1-b" x1="50%" x2="50%" y1="0%" y2="100%">
+                            <stop offset="0%" stop-color="#EEF2FF" />
+                            <stop offset="100%" stop-color="#C7D2FE" />
+                        </linearGradient>
+                    </defs>
+                    <g fill="none" fill-rule="nonzero">
+                        <path fill="url(#icon1-a)" d="M20.625 0H9.375a9.375 9.375 0 0 0 0 18.75h11.25a9.375 9.375 0 0 0 0-18.75Z" transform="translate(.885 .885)" />
+                        <path fill="url(#icon1-b)" d="M9.375 17.5A8.125 8.125 0 0 1 1.25 9.375 8.125 8.125 0 0 1 9.375 1.25 8.125 8.125 0 0 1 17.5 9.375 8.125 8.125 0 0 1 9.375 17.5Z" transform="translate(.885 .885)" />
+                    </g>
+                </svg>
+            </div>
+            <h2>
+                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:40]'">
+                    <span class="supports-[counter-set]:sr-only">40</span>K+
+                </span>
+                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Variations</span>
+            </h2>
+            <p class="text-sm text-slate-500">Many desktop publishing packages and web page editors now use Pinky as their default model text.</p>
+        </article>
+        <!-- Block #2 -->
+        <article class="p-6">
+            <div class="w-14 h-14 rounded shadow-md bg-white flex justify-center items-center -rotate-3 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="19">
+                    <defs>
+                        <linearGradient id="icon2-a" x1="50%" x2="50%" y1="0%" y2="100%">
+                            <stop offset="0%" stop-color="#A5B4FC" />
+                            <stop offset="100%" stop-color="#4F46E5" />
+                        </linearGradient>
+                        <linearGradient id="icon2-b" x1="50%" x2="50%" y1="0%" y2="100%">
+                            <stop offset="0%" stop-color="#E0E7FF" />
+                            <stop offset="100%" stop-color="#A5B4FC" />
+                        </linearGradient>
+                    </defs>
+                    <g fill="none" fill-rule="nonzero">
+                        <path fill="url(#icon2-a)" d="M5.5 0a5.5 5.5 0 0 0 0 11c.159 0 .314-.01.469-.024a15.896 15.896 0 0 1-2.393 6.759A.5.5 0 0 0 4 18.5h1a.5.5 0 0 0 .362-.155C7.934 15.64 11 11.215 11 5.5A5.506 5.506 0 0 0 5.5 0Z" />
+                        <path fill="url(#icon2-b)" d="M18.5 0a5.5 5.5 0 0 0 0 11c.159 0 .314-.01.469-.024a15.896 15.896 0 0 1-2.393 6.759.5.5 0 0 0 .424.765h1a.5.5 0 0 0 .363-.155C20.934 15.64 24 11.215 24 5.5A5.506 5.506 0 0 0 18.5 0Z" />
+                    </g>
+                </svg>
+            </div>
+            <h2>
+                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:70]'">
+                    <span class="supports-[counter-set]:sr-only">70</span>K+
+                </span>
+                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Lessons</span>
+            </h2>
+            <p class="text-sm text-slate-500">Many desktop publishing packages and web page editors now use Pinky as their default model text.</p>
+        </article>
+        <!-- Block #3 -->
+        <article class="p-6">
+            <div class="w-14 h-14 rounded shadow-md bg-white flex justify-center items-center rotate-3 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+                    <defs>
+                        <radialGradient id="icon3-a" cx="68.15%" cy="27.232%" r="67.641%" fx="68.15%" fy="27.232%">
+                            <stop offset="0%" stop-color="#E0E7FF" />
+                            <stop offset="100%" stop-color="#A5B4FC" />
+                        </radialGradient>
+                    </defs>
+                    <g fill="none" fill-rule="nonzero">
+                        <circle cx="13" cy="13" r="13" fill="url(#icon3-a)" />
+                        <path fill="#4F46E5" fill-opacity=".56" d="M0 13a12.966 12.966 0 0 0 4.39 9.737l1.15-1.722s.82-.237.997-.555c.554-.997-.43-2.733-.43-2.733a5.637 5.637 0 0 0-.198-1.23c-.148-.369-1.182-.874-1.182-.874S3.73 13.998 3.73 13a1.487 1.487 0 0 1 1.404-1.55 2.424 2.424 0 0 0 1.588-1.146s1.256-.332 1.551-.847c.295-.515-.332-2.36-.332-2.36a3.086 3.086 0 0 0-.012-1.481 2.8 2.8 0 0 0-.93-1.12 6.143 6.143 0 0 0-1.447-2.148A12.981 12.981 0 0 0 0 13ZM13 0c-.35 0-.696.018-1.04.045-.112.35-.695 1.248-.548 1.653.147.406 1.353.783 1.353.783s-.32 1.25.235 1.692c.554.443 1.44-.148 1.773-.037.331.111.258 2.29.258 2.29s1.07 1.181 2.124 1.33c1.053.147 2.656-1.64 2.656-1.64a21.131 21.131 0 0 0 3.448-1.102A12.974 12.974 0 0 0 13 0Z" />
+                        <path fill="#6366F1" fill-opacity=".4" d="M21.398 13.848c.296.702-.555 2.494-1.256 2.843a4.76 4.76 0 0 0-1.82 1.452c-.259.406-.598 2.082-1.447 2.415-.85.332-2.863 2.228-3.934 1.932-1.071-.296-1.071-2.842-.333-3.988.441-.683-.074-2.179-.113-2.695-.039-.517-1.586-1.478-1.586-1.994 0-.813 1.772-2.955 1.772-2.955s1.453-.48 1.896-.37c.448.164.877.374 1.28.628.782.058 1.552.22 2.29.48l.848.775s2.107.777 2.403 1.477Z" />
+                    </g>
+                </svg>
+    
+            </div>
+            <h2>
+                <span class="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2 transition-[_--num] duration-[3s] ease-out [counter-set:_num_var(--num)] supports-[counter-set]:before:content-[counter(num)]" x-data="{ shown: false }" x-intersect="shown = true" :class="shown && '[--num:149]'">
+                    <span class="supports-[counter-set]:sr-only">149</span>+
+                </span>
+                <span class="inline-flex font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-indigo-300 mb-2">Workshops</span>
+            </h2>
+            <p class="text-sm text-slate-500">Many desktop publishing packages and web page editors now use Pinky as their default model text.</p>
+        </article>
+    </section>
 
       <!-- Testimonials -->
       <div class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-100 mb-8">Testimonials</h2>
+        <h2 class="text-2xl font-bold text-gray-100 mb-8" id="testimonials">Testimonials</h2>
 
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
@@ -205,12 +293,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
 
       <!-- Pricing -->
       <div class="mt-16">
-        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-<stripe-pricing-table pricing-table-id="prctbl_1OcXmhAkSsK60ovbCteOaeZ9"
-publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG1T4mADrb2QOTneyINjIvgdExQOei6yWSxu00Qu2FqDYP">
-</stripe-pricing-table>
-       <!-- <h2 class="text-2xl font-bold text-gray-100 mb-8">Pricing</h2>
-
+       <h2 class="text-2xl font-bold text-gray-100 mb-8" id="pricing">Pricing</h2>
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
             <div class="bg-white p-8 rounded-lg shadow">
@@ -240,8 +323,10 @@ publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG
         <br>
 
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
-            <div class="bg-white p-8 rounded-lg shadow">
-              <h3 class="text-xl font-bold text-gray-800 mb-4">Pro</h3>
+            <div class="bg-white text-center p-8 rounded-lg shadow">
+              <h3 class="text-xl font-bold text-gray-800 mb-4">QGenius</h3>
+                <div class="flex justify-center items-center">
+              <img src="./assets/new/qgenius.png" class="size-24" alt="QGenius"></div>
               <p class="text-gray-800 mb-4">£9.99/month</p>
               <ul class="text-gray-800">
                 <li>
@@ -261,12 +346,17 @@ publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG
                   <span class="text">Access to model answers</span>
                 </li>
               </ul>
+                <button id="checkout-and-portal-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-2 px-4 rounded-full w-full" type="submit">Checkout</button>
             </div>
           </div>
           <br>
-          <div class="flex-1 mb-8 md:mb-0 md:mr-8">
-            <div class="bg-white p-8 rounded-lg shadow">
-              <h3 class="text-xl font-bold text-gray-800 mb-4">Premium</h3>
+          <div class="flex-1 mt-4 mb-8 md:mb-0 md:mr-8">
+            <div class="bg-white text-center rounded-lg shadow">
+              <h3 class="text-xl font-bold text-gray-800 mb-4">QGenius+</h3>
+              <div class="flex justify-center items-center">
+                <img src="./assets/new/qgeniusplus.png" class=" align-center size-24" alt="QGenius+">
+              </div>
+
               <p class="text-gray-800 mb-4">£19.99/month</p>
               <ul class="text-gray-800">
                 <li>
@@ -283,13 +373,14 @@ publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG
                   <img class="check" src="./assets/check.svg" style="display: inline-block;">
                   <span class="text">Access to model answers</span>
                 </li>
-              </ul>
-            </div>
-          </div> -->
+              </ul> 
+                <button id="checkout-and-portal-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 mb-4 mx-8 py-2 px-4 rounded-full w-full" type="submit">Checkout</button>
+              </div>
+          </div>
         </div>
 
       <!-- FAQ -->
-      <div class="mt-16">
+      <div class="mt-16 mx-auto">
         <h2 class="text-2xl font-bold text-gray-100 mb-8">FAQ</h2>
 
         <div class="mb-4">
@@ -309,10 +400,9 @@ publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG
       </div>
     </div>
 <footer class="relative bg-gray-900 pt-8 pb-6">
-  <div class="container mx-auto px-4">
     <div class="flex flex-wrap text-left lg:text-left">
       <div class="w-full lg:w-6/12 px-4">
-        <h4 class="text-3xl fonat-semibold text-gray-100">Let's keep in touch!</h4>
+        <h4 class="text-3xl fonat-semibold text-gray-100" id="contact">Let's keep in touch!</h4>
         <h5 class="text-lg mt-0 mb-2 text-gray-100">
           Find us on any of these platforms, we usually respond in 1-2 business days.
         </h5>

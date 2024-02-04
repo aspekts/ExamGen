@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const { createClient } = require("@supabase/supabase-js");
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-
+const {checkProfile, setDB} = require('./functions.js');
 
 /**
  * App Configuration
@@ -36,6 +36,11 @@ app.get('/', (req, res) => {
 app.get('/countdown', (req, res) => {
     res.render(path.join(__dirname + '/public/views/countdown.ejs'));
 });
+app.get('/subscribe', requiresAuth(), async (req, res) => {
+    const profile = await checkProfile(req)
+
+    res.render(path.join(__dirname + '/public/views/subscribe.ejs'));
+})
 app.get('/gen', requiresAuth(), async (req, res) => {
     // use supabase to check if profile (req.oidc.user.sid) exists. If so, check if generation refresh time has expired. If not, set the database in the "users" column.
     let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();

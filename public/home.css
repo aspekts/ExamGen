@@ -6,7 +6,11 @@
     display: inline-block;
     vertical-align: middle;
 }
-
+@property --num {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
 .navbarmenu {
   width: 50%;
   height: 100%;
