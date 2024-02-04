@@ -6,32 +6,10 @@ const port =  process.env.PORT || 3000;
 require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
-const keyvmysql = require('@keyv/mysql');
-var db = new keyvmysql(process.env.mysql, {
-    namespace: 'main',
-    table: 'users',
-    ttl: 60 * 60 * 24,
-    ssl: {
-        rejectUnauthorized:true, 
-    }
-})
-const {VertexAI} = require('@google-cloud/vertexai');
-const vertex_ai = new VertexAI({project: 'global-shard-402113', location: 'us-central1'});
-const model = 'gemini-pro';
+const { createClient } = require("@supabase/supabase-js");
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Instantiate the models
-const generativeModel = vertex_ai.preview.getGenerativeModel({
-  model: model,
-  generation_config: {
-    "max_output_tokens": 2048,
-    "temperature": 0.4,
-    "top_p": 1,
-    "top_k": 32
-},
-  safety_settings: [],
-});
 
-db.on('error', err => console.log('[MAIN]: Error:', err));
 /**
  * App Configuration
 */
@@ -59,68 +37,75 @@ app.get('/countdown', (req, res) => {
     res.render(path.join(__dirname + '/public/views/countdown.ejs'));
 });
 app.get('/gen', requiresAuth(), async (req, res) => {
-
-    let profile = await db.get(`user:${req.oidc.user.sid}`) ? db.get(`user:${req.oidc.user.sid}`)  : null;
-    if (profile) {
-        const reset_time = await db.get(profile).gen_refresh ? db.get(profile).gen_refresh : 0;
-        if(Date.now() > reset_time) await setDB();
+    // use supabase to check if profile (req.oidc.user.sid) exists. If so, check if generation refresh time has expired. If not, set the database in the "users" column.
+    let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
+    if(profile.data) {
+        const reset_time = await profile.data.profile.gen_refresh ? profile.data.profile.gen_refresh : 0;
+        if(Date.now() > reset_time) {
+            await setDB();
+            console.log("Profile refreshed");
+        }
     }
-   else {
-    await setDB();
-    profile = await db.get(`user:${req.oidc.user.sid}`);
-   }
+    else {
+        await setDB();
+        profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
+        console.log(profile)
+        console.log("Profile created: " + profile);
+    }
+
+    async function setDB(){
+        // set database with profile in users column, with the "profile_obj" data
+        const currentDate = new Date();
+        var profile_obj = {
+            user:req.oidc.user,
+            premium: 0,
+            premiumExpiry: null,
+            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
+            free_gens:10
+        }
+        const { data, error } = await supabase
+            .from('users')
+            .upsert(
+                [
+                    { "profile": profile_obj },
+                    { "uid": req.oidc.user.sid }
+                ]
+                    )
+            .eq('uid', req.oidc.user.sid).select();
+            if(error) console.log(error);
+        console.log("Profile updated: " + JSON.stringify(data));
+    
+     }
+
 
     res.render(path.join(__dirname + '/public/views/gen.ejs'), {
         user: req.oidc.user,
         profile: profile,
-        premium: profile ? profile.premium !== 0 : false,
-        db: db
+        premium: profile ? profile.premium !== 0 : 0,
     });
-    const currentDate = new Date();
-    var profile_obj = {
-        user:req.oidc.user,
-        premium: 0,
-        premiumExpiry: null,
-        gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0),
-        free_gens:10
-    }
-  async function setDB() {
-    await db.set(`user:${req.oidc.user.sid}`, profile_obj);
-  }
+
+
 });
   // Defined routes
 app.post(`/generate-question`, async (req, res) => {
     const prompt = req.body.prompt;
     const value = req.body.value
     if (prompt) {
-        const question = await generateQuestion(value, prompt);
+        const question = await generateQuestion(req,value, prompt);
         res.send({ question });
     } else {
         res.status(400).send({ error: 'Prompt not provided.' });
     }
 });
 
-async function generateQuestion(value, prompt) {
- 
-    const text = `
-
-        You are a language model that provides correct and detailed exam style questions, in order, in accordance with a specific subject's specification. Put the question number then mention the question explicitly, as well as the marks, and then in the next line "Ans: " and Answer.
-        Output format:
-       <Question Number>. <Question> [<Marks>]
-
-        Sample Output (Economics, Market Failure):
-
-        1. Explain how ‘asymmetric information’ can lead to market failure in health provision. [5]
-        2. Assess the benefits of indirect taxation to remove market failure for plastic bags. [8]
-        3. ‘Public parks are a public good’. Assess this statement. [10]
-
-        For this prompt specifically:
-        ${getMessage(value, prompt)[0]}
-        `;
+async function generateQuestion(req,value, prompt) {
+    async function fetchQuestion(text) {
        const response= await fetch(process.env.url, {
             method: "POST",
             headers: {
               "Authorization": `Bearer ${process.env.OR_API_KEY}`,
+              "HTTP-Referer": "https://qgenie.co.uk",
+              "X-Title": "QGenie (Sources)",
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -135,43 +120,95 @@ async function generateQuestion(value, prompt) {
           }
           const result = await response.json();
           return result.choices[0].message.content;
+        }
+        const source_txt = `You are a language model that provides sources or context for a specific subject. The subject is ${getMessage(value, prompt)[0]}, and the specific topic within that is ${prompt}. Provide an extract or source which can be used as context to create answer exam style questions Do not provide an answer to this question, or the questions themselves. Provide exclusively one detailed source or piece of context that can be used to answer a variety of questions in relation to the topic, preferrably around 1-2 paragraphs in length.`;
+        const source = await fetchQuestion(source_txt);
+        const question_txt = `
+
+        Now, provide exam style questions in relation to ${prompt}, as well as the source you just provided.  Put the question number then mention the question explicitly, as well as the marks, and then in the next line "Ans: " and Answer.
+        Output format:
+       <Question Number>. <Question> [<Marks>]
+
+        Do not provide an answer to each question. Provide exclusively the questions, and the marks.
+
+        For this prompt specifically:
+        ${getMessage(value, prompt)[1]}
+        `;
+        const response= await fetch(process.env.url, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.OR_API_KEY}`,
+              "HTTP-Referer": "https://qgenie.co.uk",
+              "X-Title": "QGenie (Qs)",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              "model": "google/gemini-pro", // Optional (user controls the default),
+              "messages": [
+                {role: "user", content: source_txt},
+                {role: "assistant", content: source },
+                {role: "user", content: question_txt },
+              ]
+            })
+          });
+          if(!response.ok) {
+            throw new Error(response.statusText);
+          }
+          const result = await response.json();
+          console.log(source);
+          console.log(result.choices[0].message.content);
+          // reduce free_gens in supabase database by one, and if free gens is now zero, return "No more free gens"
+          let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
+          console.log(profile);
+          if(profile.data.profile.free_gens > 0) {
+            profile.data.profile.free_gens -= 1;
+            await supabase
+            .from('users')
+            .upsert([{ "profile": profile.data }, { "uid": req.oidc.user.sid }])
+            .eq('uid', req.oidc.user.sid);
+          }
+          else {
+              return "You have run out of Free Generations! Please purchase QGenie Pro or Premium for Unlimited Generations!";
+          }
+
+          return `${result.choices[0].message.content}`;
 }
 
 
 function getMessage(msg, prompt) {
     switch(msg){
         case '1':
-            return [`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "Introduction to markets and market failure" specification. The essay question should be in style of the following prompt: ${prompt}.`];
+            return [`Edexcel A Level Economics A: Paper 1: "Introduction to markets and market failure`,`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "Introduction to markets and market failure" specification. The essay question should be in style of the following prompt: ${prompt}.`];
         case '2':
-            return [`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "The UK Economy: Performace and Policies" specification. The essay question should also be in relation to: ${prompt}.`];
+            return ["Edexcel A Level Economics A: Paper 2: The UK Economy: Performace and Policies",`Write a 4, 5, 10, 15 and 20 mark essay question in accordance with the Edexcel A Level Economics A: "The UK Economy: Performace and Policies" specification. The essay question should also be in relation to: ${prompt}.`];
         case '3':
-            return [`Write 5 25 mark essay questions in accordance with the AQA A Level History: Tsarist and Communist Russia specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the statements: "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`];
+            return ["AQA A Level History: Tsarist and Communist Russia",`Write 5 25 mark essay questions in accordance with the AQA A Level History: Tsarist and Communist Russia specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the statements: "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`];
         case '4':
-            return [`Write 5 25 mark essay questions in accordance with the AQA A Level History: The English Revolution specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the response "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`];
+            return ["AQA A Level History: The English Revolution",`Write 5 25 mark essay questions in accordance with the AQA A Level History: The English Revolution specification. The essay questions should also be in relation to: ${prompt}. The essay questions should provide a statement, followed by one of the response "To what extent do you agree", "Assess the validity of this view", or "Explain why you disagree or agree with this view". The statement should also provide a time range, which would best fit the question.`];
         case '5':
-            return [`Write  5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}.`];
+            return ["Edexcel A Level Mathematics: Year 1 Statistics and Mechanics", `Write  5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}.`];
         case '6':
-            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
+            return ["Edexcel A Level Mathematics: Year 1 Pure",`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 1 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
         case '7':
-            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
+            return ["Edexcel A Level Mathematics: Year 2 Pure",`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Pure Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
         case '8':
-            return [`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
+            return ["Edexcel A Level Mathematics: Year 2 Statistics and Mechanics",`Write 5 exam style questions in accordance with the Edexcel A Level Mathematics: Year 2 Statistics and Mechanics Specification. Write any equations involved in any questions in LaTeX, inline format. The questions should be related to ${prompt}`];
         case '9':
-            return [`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Physical Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
+            return ["AQA A Level Geography: Physical Geography",`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Physical Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '10':
-            return [`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Human Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
+            return ["AQA A Level Geography: Human Geography",`Write a 3, 4, 6, 9 and 20 mark essay question in accordance with the AQA A Level Geography: Human Geography Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '11':
-            return [`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Government Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
+            return ["Edexcel A Level Government and Politics: UK Government",`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Government Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '12':
-            return [`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Politics Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
+            return ["Edexcel A Level Government and Politics: UK Politics",`Write 5 30 mark essay questions in accordance with the Edexcel A Level Government and Politics: UK Politics Specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '13':
-            return [`Write 2 10, 2 15 and 1 30 mark essay question in accordance with the OCR A Level Media: Evolving Media specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
+            return ["OCR A Level Media: Evolving Media",`Write 2 10, 2 15 and 1 30 mark essay question in accordance with the OCR A Level Media: Evolving Media specification. The essay questions should be in relation to the following prompt: ${prompt}.`];
         case '14':
-            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the AQA A Level Biology Specification. The questions should be in relation to the following prompt: ${prompt}.`];
+            return ["Edexcel A Level Biology",`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the AQA A Level Biology Specification. The questions should be in relation to the following prompt: ${prompt}.`];
         case '15':
-            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Inorganic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`];
+            return ["Edexcel A Level Chemistry: Advanced Inorganic and Physical Chemistry",`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Inorganic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`];
         case '16':
-            return [`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`];
+            return ["Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry",`Write a 1, 2, 3, 4 and 6 mark exam style question in accordance with the Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry Specification. Write any equations involved in any questions in LaTeX format. The questions should be in relation to the following prompt: ${prompt}.`];
     }
 }
 

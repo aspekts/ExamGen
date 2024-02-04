@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="./home.css">
   </head>
   <body class="bg-gray-900">
-    <nav class="navbarmenu sticky bg-white h-20 mt-4">
+    <nav class="navbarmenu sticky bg-white h-20 mt-5">
       <div class="container mx-auto flex justify-between items-center">
       <img src="../assets/new/QGL.svg" class="size-24 mr-2" alt="Tailwindcss Navigation">
 
@@ -205,7 +205,11 @@ mobile_icon.addEventListener('click', openCloseMenu);
 
       <!-- Pricing -->
       <div class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-100 mb-8">Pricing</h2>
+        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+<stripe-pricing-table pricing-table-id="prctbl_1OcXmhAkSsK60ovbCteOaeZ9"
+publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG1T4mADrb2QOTneyINjIvgdExQOei6yWSxu00Qu2FqDYP">
+</stripe-pricing-table>
+       <!-- <h2 class="text-2xl font-bold text-gray-100 mb-8">Pricing</h2>
 
         <div class="flex flex-col md:flex-row">
           <div class="flex-1 mb-8 md:mb-0 md:mr-8">
@@ -281,7 +285,7 @@ mobile_icon.addEventListener('click', openCloseMenu);
                 </li>
               </ul>
             </div>
-          </div>
+          </div> -->
         </div>
 
       <!-- FAQ -->
