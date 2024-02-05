@@ -109,14 +109,14 @@ app.post(`/generate-question`, async (req, res) => {
     const prompt = req.body.prompt;
     const value = req.body.value
     if (prompt) {
-        const question = await generateQuestion(req,value, prompt);
+        const question = await generateQuestion(req, res, value, prompt);
         res.send({ question });
     } else {
         res.status(400).send({ error: 'Prompt not provided.' });
     }
 });
 
-async function generateQuestion(req,value, prompt) {
+async function generateQuestion(req, res, value, prompt) {
     async function fetchQuestion(text) {
         try {
        const response= await fetch(process.env.url, {
@@ -135,7 +135,7 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            throw new Error(response.statusText);
+            res.status(response.status || 400).send({ error: response.statusText });
           }
           const result = await response.json();
           return result.choices[0].message.content;
