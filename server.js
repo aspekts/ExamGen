@@ -170,7 +170,7 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
+            res.status(response.status || 400).send({ error: response.statusText });
           }
           const result = await response.json();
           // reduce free_gens in supabase database by one, and if free gens is now zero, return "No more free gens"
