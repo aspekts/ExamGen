@@ -50,7 +50,7 @@ async function setDB(req){
         .from('users')
         .insert([{"profile": profile_obj, "uid": req.oidc.user.sid}]).select();
     if(error) console.log(error);
-    return data;
+    return data[0];
  }
 async function updateDB(req,body,profile_obj){
     const { data, error } = await supabase
@@ -60,7 +60,7 @@ async function updateDB(req,body,profile_obj){
         .eq('id', body.id)
         .select();
     if(error) return console.log(error);
-    return data;
+    return data[0];
 }
  async function checkProfile(req){
     const { data, error } = await supabase
@@ -96,54 +96,8 @@ app.get('/subscribe', requiresAuth(), async (req, res) => {
     });
 })
 app.get('/gen', requiresAuth(), async (req, res) => {
-    async function setDB(){
-        // set database with profile in users column, with the "profile_obj" data
-        const currentDate = new Date();
-        var profile_obj = {
-            user:req.oidc.user,
-            premium: 0,
-            premiumExpiry: null,
-            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
-            free_gens:10
-        }
-        const { data, error } = await supabase
-            .from('users')
-            .upsert(
-                [
-                    { "profile": profile_obj, "uid": req.oidc.user.sid },
-                ]
-                    )
-            .eq('uid', req.oidc.user.sid).select();
-            if(error) console.log(error);
-        console.log("Profile updated: " + JSON.stringify(data));
-        return;
-    
-     }
-     async function checkProfile(req){
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-        if(error) console.log(error);
-        if(data) {
-            const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
-            if(Date.now() > reset_time) {
-                await setDB();
-                console.log("Profile refreshed");
-            }
-        }
-        else {
-            await setDB();
-            profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-            console.log(profile)
-            console.log("Profile created: " + profile);
-        }
-        return data;
-    
-    }
     let profile = checkProfile(req);
     res.render(path.join(__dirname + '/public/views/gen.ejs'), {
-        user: req.oidc.user,
         profile: profile,
         premium: profile ? profile.premium !== 0 : 0,
     });
