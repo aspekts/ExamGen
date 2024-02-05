@@ -217,8 +217,6 @@ async function generateQuestion(req,value, prompt) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
           const result = await response.json();
-          console.log(source);
-          console.log(result.choices[0].message.content);
           // reduce free_gens in supabase database by one, and if free gens is now zero, return "No more free gens"
           let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
           console.log(profile);
