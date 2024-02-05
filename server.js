@@ -8,7 +8,6 @@ const path = require('path');
 const fs = require('fs');
 const { createClient } = require("@supabase/supabase-js");
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-const {checkProfile, setDB} = require('./functions.js');
 
 /**
  * App Configuration
@@ -36,111 +35,69 @@ app.get('/', (req, res) => {
 app.get('/countdown', (req, res) => {
     res.render(path.join(__dirname + '/public/views/countdown.ejs'));
 });
-app.get('/subscribe', requiresAuth(), async (req, res) => {
-    async function setDB(){
-        // set database with profile in users column, with the "profile_obj" data
-        const currentDate = new Date();
-        var profile_obj = {
-            user:req.oidc.user,
-            premium: 0,
-            premiumExpiry: null,
-            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
-            free_gens:10
+async function setDB(req){
+    // set database with profile in users column, with the "profile_obj" data
+    const currentDate = new Date();
+    var profile_obj = {
+        user:req.oidc.user,
+        premium: 0,
+        premiumExpiry: null,
+        gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
+        free_gens:10
+    }
+    // check if db exists
+    const { data, error } = await supabase
+        .from('users')
+        .insert([{"profile": profile_obj, "uid": req.oidc.user.sid}]).select();
+    if(error) console.log(error);
+    return data[0];
+ }
+async function updateDB(req,body,profile_obj){
+    const { data, error } = await supabase
+        .from('users')
+        .update([{"profile": profile_obj}])
+        .eq('uid', req.oidc.user.sid)
+        .eq('id', body.id)
+        .select();
+    if(error) return console.log(error);
+    return data[0];
+}
+ async function checkProfile(req){
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('uid', req.oidc.user.sid);
+    if(error) console.log(error);
+    if(data && data.length > 0) {
+        const reset_time = await data[0].profile.gen_refresh ? data[0].profile.gen_refresh : 0;
+        if(Date.now() > reset_time) {
+           const new_data = await updateDB(req, data, {
+                user:req.oidc.user,
+                premium: 0,
+                premiumExpiry: null,
+                gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
+                free_gens:10
+            });
+            return new_data;
         }
-        const { data, error } = await supabase
-            .from('users')
-            .upsert(
-                [
-                    { "profile": profile_obj },
-                    { "uid": req.oidc.user.sid }
-                ]
-                    )
-            .eq('uid', req.oidc.user.sid).select();
-            if(error) console.log(error);
-        console.log("Profile updated: " + JSON.stringify(data));
-        return;
-    
-     }
-     async function checkProfile(req){
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('uid', req.oidc.user.sid).single();
-        if(error) console.log(error);
-        if(data) {
-            const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
-            if(Date.now() > reset_time) {
-                await setDB();
-                console.log("Profile refreshed");
-            }
-        }
-        else {
-            await setDB();
-            profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-            console.log(profile)
-            console.log("Profile created: " + profile);
-        }
-        return data;
-    
+        
+        return data[0];
+    }
+    else {
+        const new_data = await setDB(req);
+        return new_data;
     }
 
+}
+app.get('/subscribe', requiresAuth(), async (req, res) => {
     const profile = await checkProfile(req);
-
     res.render(path.join(__dirname + '/public/views/subscribe.ejs'), {
         profile: profile
     });
 })
 app.get('/gen', requiresAuth(), async (req, res) => {
-    async function setDB(){
-        // set database with profile in users column, with the "profile_obj" data
-        const currentDate = new Date();
-        var profile_obj = {
-            user:req.oidc.user,
-            premium: 0,
-            premiumExpiry: null,
-            gen_refresh:new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate() + 1,0,0,0).getTime(),
-            free_gens:10
-        }
-        const { data, error } = await supabase
-            .from('users')
-            .upsert(
-                [
-                    { "profile": profile_obj, "uid": req.oidc.user.sid },
-                ]
-                    )
-            .eq('uid', req.oidc.user.sid).select();
-            if(error) console.log(error);
-        console.log("Profile updated: " + JSON.stringify(data));
-        return;
-    
-     }
-     async function checkProfile(req){
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('uid', req.oidc.user.sid).single();
-        if(error) console.log(error);
-        if(data) {
-            const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
-            if(Date.now() > reset_time) {
-                await setDB();
-                console.log("Profile refreshed");
-            }
-        }
-        else {
-            await setDB();
-            profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-            console.log(profile)
-            console.log("Profile created: " + profile);
-        }
-        return data;
-    
-    }
     let profile = checkProfile(req);
-
-
     res.render(path.join(__dirname + '/public/views/gen.ejs'), {
-        user: req.oidc.user,
         profile: profile,
         premium: profile ? profile.premium !== 0 : 0,
     });
@@ -152,15 +109,16 @@ app.post(`/generate-question`, async (req, res) => {
     const prompt = req.body.prompt;
     const value = req.body.value
     if (prompt) {
-        const question = await generateQuestion(req,value, prompt);
+        const question = await generateQuestion(req, res, value, prompt);
         res.send({ question });
     } else {
         res.status(400).send({ error: 'Prompt not provided.' });
     }
 });
 
-async function generateQuestion(req,value, prompt) {
+async function generateQuestion(req, res, value, prompt) {
     async function fetchQuestion(text) {
+        try {
        const response= await fetch(process.env.url, {
             method: "POST",
             headers: {
@@ -177,11 +135,16 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            throw new Error(response.statusText);
+            res.status(response.status || 400).send({ error: response.statusText });
           }
           const result = await response.json();
           return result.choices[0].message.content;
         }
+        catch(error) {
+            console.log(error);
+            return "An unexpected error occurred. Please try again later.";
+        }
+    }
         const source_txt = `You are a language model that provides sources or context for a specific subject. The subject is ${getMessage(value, prompt)[0]}, and the specific topic within that is ${prompt}. Provide an extract or source which can be used as context to create answer exam style questions Do not provide an answer to this question, or the questions themselves. Provide exclusively one detailed source or piece of context that can be used to answer a variety of questions in relation to the topic, preferrably around 1-2 paragraphs in length.`;
         const source = await fetchQuestion(source_txt);
         const question_txt = `
@@ -195,6 +158,8 @@ async function generateQuestion(req,value, prompt) {
         For this prompt specifically:
         ${getMessage(value, prompt)[1]}
         `;
+
+        try {
         const response= await fetch(process.env.url, {
             method: "POST",
             headers: {
@@ -213,26 +178,11 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            res.status(400).send({ error: response.statusText });
+            res.status(response.status || 400).send({ error: response.statusText });
           }
           const result = await response.json();
-          console.log(source);
-          console.log(result.choices[0].message.content);
           // reduce free_gens in supabase database by one, and if free gens is now zero, return "No more free gens"
-          let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
-          console.log(profile);
-          if(profile.data.profile.free_gens > 0) {
-            profile.data.profile.free_gens -= 1;
-            await supabase
-            .from('users')
-            .upsert([{ "profile": profile.data.profile, "uid": req.oidc.user.sid }], {ignoreDuplicates: false})
-            .eq('uid', req.oidc.user.sid);
-            console.log("Profile updated to reduce free gens: " + JSON.stringify(profile));
           let profile = await checkProfile(req);
-          if(!profile) {
-            return "An unexpected error occurred. Please try again later.";
-          }
-        }
           if(profile.profile.free_gens > 0) {
             profile.profile.free_gens -= 1;
             await updateDB(req, profile, profile.profile);
@@ -242,6 +192,11 @@ async function generateQuestion(req,value, prompt) {
           }
 
           return `${result.choices[0].message.content}`;
+        }
+        catch(error) {
+            console.log(error);
+            return "An unexpected error occurred. Please try again later.";
+        }
 }
 
 
