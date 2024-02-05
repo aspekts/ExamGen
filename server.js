@@ -63,7 +63,7 @@ app.get('/subscribe', requiresAuth(), async (req, res) => {
         const { data, error } = await supabase
             .from('users')
             .select('*')
-            .eq('uid', req.oidc.user.sid).limit(1).single();
+            .eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
         if(error) console.log(error);
         if(data) {
             console.log(data)
@@ -118,7 +118,7 @@ app.get('/gen', requiresAuth(), async (req, res) => {
         const { data, error } = await supabase
             .from('users')
             .select('*')
-            .eq('uid', req.oidc.user.sid).limit(1).single();
+            .eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
         if(error) console.log(error);
         if(data) {
             const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
