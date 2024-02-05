@@ -183,7 +183,7 @@ async function generateQuestion(req, res, value, prompt) {
           const result = await response.json();
           // reduce free_gens in supabase database by one, and if free gens is now zero, return "No more free gens"
           let profile = await checkProfile(req);
-          if(profile.profile.free_gens > 0) {
+          if(profile && profile.profile.free_gens > 0) {
             profile.profile.free_gens -= 1;
             await updateDB(req, profile, profile.profile);
           }
