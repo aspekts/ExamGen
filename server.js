@@ -118,6 +118,7 @@ app.post(`/generate-question`, async (req, res) => {
 
 async function generateQuestion(req,value, prompt) {
     async function fetchQuestion(text) {
+        try {
        const response= await fetch(process.env.url, {
             method: "POST",
             headers: {
@@ -139,6 +140,11 @@ async function generateQuestion(req,value, prompt) {
           const result = await response.json();
           return result.choices[0].message.content;
         }
+        catch(error) {
+            console.log(error);
+            return "An unexpected error occurred. Please try again later.";
+        }
+    }
         const source_txt = `You are a language model that provides sources or context for a specific subject. The subject is ${getMessage(value, prompt)[0]}, and the specific topic within that is ${prompt}. Provide an extract or source which can be used as context to create answer exam style questions Do not provide an answer to this question, or the questions themselves. Provide exclusively one detailed source or piece of context that can be used to answer a variety of questions in relation to the topic, preferrably around 1-2 paragraphs in length.`;
         const source = await fetchQuestion(source_txt);
         const question_txt = `
@@ -152,6 +158,8 @@ async function generateQuestion(req,value, prompt) {
         For this prompt specifically:
         ${getMessage(value, prompt)[1]}
         `;
+
+        try {
         const response= await fetch(process.env.url, {
             method: "POST",
             headers: {
@@ -184,6 +192,11 @@ async function generateQuestion(req,value, prompt) {
           }
 
           return `${result.choices[0].message.content}`;
+        }
+        catch(error) {
+            console.log(error);
+            return "An unexpected error occurred. Please try again later.";
+        }
 }
 
 
