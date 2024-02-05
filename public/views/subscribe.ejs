@@ -2,9 +2,16 @@
     <!-- Stripe Integration, but minimal page to display prices for QGenius and QGenius+-->
     <head>
         <script src="https://js.stripe.com/v3/"></script>
+        <link rel="stylesheet" href="../output.css">
+        <script src="https://kit.fontawesome.com/12061f55da.js" crossorigin="anonymous"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="icon" href="./assets/new/QTP.svg" />
+        <link rel="stylesheet" href="../home.css">
     </head>
     <body class="bg-gray-900 mx-8">
-        <nav class="navbarmenu sticky bg-white bg-opacity-50 mt-5 top-0 md:h-18">
+        <nav class="navbarmenu sticky bg-white mt-5 top-0 md:h-18">
           <div class="container flex justify-between items-center sticky  px-8 mx-auto md:flex">
           <img src="../assets/new/QGL.svg" class="size-24 my-auto" alt="Tailwindcss Navigation">
     
@@ -61,6 +68,7 @@
 <stripe-pricing-table pricing-table-id="prctbl_1OcXmhAkSsK60ovbCteOaeZ9"
 publishable-key="pk_live_51O86lQAkSsK60ovboiuE0DHapW2DYu8mWaXCsggepq0uwjK4ZUs7FG1T4mADrb2QOTneyINjIvgdExQOei6yWSxu00Qu2FqDYP" customer-email="{{user.email}}">
 </stripe-pricing-table>
+    <
     </body>
 
 </html>

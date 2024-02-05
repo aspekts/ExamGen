@@ -8,7 +8,6 @@ const path = require('path');
 const fs = require('fs');
 const { createClient } = require("@supabase/supabase-js");
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-const {checkProfile, setDB} = require('./functions.js');
 
 /**
  * App Configuration
@@ -51,8 +50,7 @@ app.get('/subscribe', requiresAuth(), async (req, res) => {
             .from('users')
             .upsert(
                 [
-                    { "profile": profile_obj },
-                    { "uid": req.oidc.user.sid }
+                    { "profile": profile_obj,"uid": req.oidc.user.sid },
                 ]
                     )
             .eq('uid', req.oidc.user.sid).select();
@@ -65,10 +63,12 @@ app.get('/subscribe', requiresAuth(), async (req, res) => {
         const { data, error } = await supabase
             .from('users')
             .select('*')
-            .eq('uid', req.oidc.user.sid).single();
+            .eq('uid', req.oidc.user.sid).limit(1).single();
         if(error) console.log(error);
         if(data) {
+            console.log(data)
             const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
+            console.log(reset_time, Date.now())
             if(Date.now() > reset_time) {
                 await setDB();
                 console.log("Profile refreshed");
@@ -76,7 +76,7 @@ app.get('/subscribe', requiresAuth(), async (req, res) => {
         }
         else {
             await setDB();
-            profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
+           let profile = await supabase.from('users').select('*').eq('uid', req.oidc.user.sid).limit(1).maybeSingle();
             console.log(profile)
             console.log("Profile created: " + profile);
         }
@@ -118,7 +118,7 @@ app.get('/gen', requiresAuth(), async (req, res) => {
         const { data, error } = await supabase
             .from('users')
             .select('*')
-            .eq('uid', req.oidc.user.sid).single();
+            .eq('uid', req.oidc.user.sid).limit(1).single();
         if(error) console.log(error);
         if(data) {
             const reset_time = await data.profile.gen_refresh ? data.profile.gen_refresh : 0;
