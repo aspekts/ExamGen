@@ -27,7 +27,7 @@ if (!questionContainer.innerText) {
     questionContainer.innerText = 'No question generated yet. Try to generate one!';
 }
 
-generateBtn.addEventListener('click', () => {
+generateBtn.addEventListener('click', async () => {
     // get value of nested  subprompt select
     const prompt = form.elements['sub-prompt'].options[form.elements['sub-prompt'].selectedIndex].text;
     const val = form.elements.prompt.options[form.elements.prompt.selectedIndex].value;
@@ -36,28 +36,30 @@ generateBtn.addEventListener('click', () => {
         questionContainer.innerHTML = `
             <img src="./assets/new/logo.gif" alt="QGenie Logo Anim" class="h-16 w-28"></img>
         `;
-        fetch('/generate-question', {
+        const response = await fetch('/generate-question', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ value: val, prompt: prompt })
         })
-        .then(response => response.json())
-        .then(data => {
+        if(!response.ok){
+            console.log(response);
+            alert("Something went wrong. Please try again.");
+            return;
+        }
+        const data = await response.json();
+            console.log(data);
             const question = data.question;
             questionContainer.innerHTML = '';
             para.innerText = question;
             questionContainer.appendChild(para);
             if (MathJax) {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
+                await MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
             }
             if(!MathJax) {
                 console.log("MathJax not loaded");
             }
-            // Hide the loader
-        })
-        .catch(error => alert(error));
     } else {
         alert('Please select a prompt!');
         return;
