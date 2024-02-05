@@ -135,7 +135,7 @@ async function generateQuestion(req, res, value, prompt) {
             })
           });
           if(!response.ok) {
-            res.status(response.status || 400).send({ error: response.statusText });
+           await res.status(response.status || 400).send({ error: response.statusText });
           }
           const result = await response.json();
           return result.choices[0].message.content;
@@ -178,7 +178,7 @@ async function generateQuestion(req, res, value, prompt) {
             })
           });
           if(!response.ok) {
-            res.status(response.status || 400).send({ error: response.statusText });
+           await res.status(response.status || 400).send({ error: response.statusText });
           }
           const result = await response.json();
           // reduce free_gens in supabase database by one, and if free gens is now zero, return "No more free gens"
