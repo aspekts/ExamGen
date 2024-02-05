@@ -213,7 +213,7 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}` || response.statusText);
+            res.status(400).send({ error: response.statusText });
           }
           const result = await response.json();
           console.log(source);
@@ -228,6 +228,14 @@ async function generateQuestion(req,value, prompt) {
             .upsert([{ "profile": profile.data.profile, "uid": req.oidc.user.sid }], {ignoreDuplicates: false})
             .eq('uid', req.oidc.user.sid);
             console.log("Profile updated to reduce free gens: " + JSON.stringify(profile));
+          let profile = await checkProfile(req);
+          if(!profile) {
+            return "An unexpected error occurred. Please try again later.";
+          }
+        }
+          if(profile.profile.free_gens > 0) {
+            profile.profile.free_gens -= 1;
+            await updateDB(req, profile, profile.profile);
           }
           else {
               return "You have run out of Free Generations! Please purchase QGenie Pro or Premium for Unlimited Generations!";
