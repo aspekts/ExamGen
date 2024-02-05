@@ -213,7 +213,8 @@ async function generateQuestion(req,value, prompt) {
             })
           });
           if(!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}` || response.statusText);
+            console.log(response);
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
           const result = await response.json();
           console.log(source);
