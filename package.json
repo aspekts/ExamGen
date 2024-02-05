@@ -41,5 +41,8 @@
   "bugs": {
     "url": "https://github.com/aspekts/QGenie/issues"
   },
-  "homepage": "https://github.com/aspekts/QGenie#readme"
+  "homepage": "https://github.com/aspekts/QGenie#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
 }
