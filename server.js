@@ -72,7 +72,7 @@ async function updateDB(req,body,profile_obj){
         const reset_time = await data[0].profile.gen_refresh ? data[0].profile.gen_refresh : 0;
         if(Date.now() > reset_time) {
             const currentDate = new Date();
-           const new_data = await updateDB(req, data, {
+           const new_data = await updateDB(req, data[0], {
                 user:req.oidc.user,
                 premium: 0,
                 premiumExpiry: null,
