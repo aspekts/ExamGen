@@ -53,12 +53,18 @@ generateBtn.addEventListener('click', async () => {
             questionContainer.innerHTML = '';
             para.innerText = question;
             questionContainer.appendChild(para);
-            if (MathJax) {
-                await MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
-            }
-            if(!MathJax) {
-                console.log("MathJax not loaded");
-            }
+            renderMathInElement(questionContainer, {
+                // customised options
+                // • auto-render specific keys, e.g.:
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                // • rendering keys, e.g.:
+                throwOnError : false
+              });
     } else {
         alert('Please select a prompt!');
         return;

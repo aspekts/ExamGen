@@ -54,12 +54,18 @@ generateBtn.addEventListener('click', async () => {
             questionContainer.innerHTML = '';
             para.innerText = question;
             questionContainer.appendChild(para);
-            if (MathJax) {
-                await MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
-            }
-            if(!MathJax) {
-                console.log("MathJax not loaded");
-            }
+            renderMathInElement(questionContainer, {
+                // customised options
+                // • auto-render specific keys, e.g.:
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                // • rendering keys, e.g.:
+                throwOnError : false
+              });
     } else {
         alert('Please select a prompt!');
         return;
@@ -130,12 +136,10 @@ module.exports={
         "Measures of Location and Spread",
         "Representations of Data",
         "Correlation",
-        "Statistical Distribution",
+        "Statistical (Binomial) Distribution",
         "Hypothesis Testing",
-        "Modelling in Mechanics",
-        "Constant Acceleration",
-        "Forces and Motion",
-        "Variable Acceleration"
+        "Conditional Probability",
+        "The Normal Distribution"
     ],
     "6": [
         "Proofs",
@@ -148,25 +152,53 @@ module.exports={
         "Vectors"
     ],
     "7": [
-        "Proofs by Contradicition",
-        "Algebra and Functions (Year 2)",
-        "Trigonometry (Year 2)",
-        "Exponentials and Logarithms (Year 2)",
-        "Sequences and Series",
-        "Differentiation (Year 2)",
-        "Integration (Year 2)",
-        "Numerical Methods (Year 2)",
-        "3D Vectors"
+        "Modelling in Mechanics",
+        "Constant Acceleration",
+        "Forces and Motion",
+        "Variable Acceleration",
+        "Hypothesis Testing",
+        "Kinematics",
+        "Forces and Motion",
+        "Moments"
     ],
     "8": [
-        "Conditional Probability",
-        "The Normal Distribution",
-        "Hypothesis Testing (Year 2)",
-        "Kinematics",
-        "Forces and Motion (Year 2)",
-        "Moments (Year 2)"
+        "Complex Numbers",
+        "Argand Diagrams",
+        "Series",
+        "Roots of Polynomials",
+        "Volumes of Revolution",
+        "Matrices",
+        "Linear Transformations",
+        "Proof by Induction",
+        "Vectors",
+        "Polar Coordinates",
+        "Modelling wih Differential Equations"
     ],
     "9": [
+        "Discrete Random Variables",
+        "Poisson Distributions",
+        "Geometric and NB Distributions",
+        "Hypothesis Testing",
+        "Central Limit Theorem",
+        "Chi-Squared Tests",
+        "Probability Generating Functions",
+        "Quality of Tests",
+        "Estimation, Confidence Intervals and Tests Using Normal Distribution",
+        "Confidence Intervals and Tests Using t-Distribution"
+    ],
+    "10": [
+        "Momentum and Impulse",
+        "Work, Energy and Power",
+        "Elastic Strings and Springs",
+        "Elastic Collisions in 1D",
+        "Elastic Collisions in 2D",
+        "Circular Motion",
+        "Centres of Mass of Plane Figures",
+        "Further Centres of Mass",
+        "Kinematics",
+        "Dynamics"
+    ],
+    "11": [
         "Water and Carbon Cycles",
         "Hot Desert Systems and Landscapes",
         "Coastal Systems and Landscapes",
@@ -174,14 +206,14 @@ module.exports={
         "Hazards",
         "Ecosystems under Stress"
     ],
-    "10": [
+    "12": [
         "Global systems and global governance",
         "Changing places",
         "Contemporary urban environments",
         "Population and the environment",
         "Resource security"
     ],
-    "11": [
+    "13": [
         "The Constitution",
         "Parliament",
         "Prime Minister and the executive",
@@ -189,21 +221,21 @@ module.exports={
         "The judiciary and civil liberties",
         "Devolution"
     ],
-    "12": [
+    "14": [
         "Democracy and participation",
         "Political parties",
         "Electoral systems",
         "Voting behaviour and the media",
         "Pressure groups"
     ],
-    "13": [
+    "15": [
         "Media Language",
         "Representations",
         "Media Industries",
         "Audiences",
         "Media Contexts"
     ],
-    "14": [
+    "16": [
         "Biological Molecules",
         "Cells",
         "Organisms exchange substances with their environment",
@@ -212,7 +244,7 @@ module.exports={
         "Genetics, populations, evolution and ecosystems",
         "The control of gene expression"
     ],
-    "15": [
+    "17": [
         "Atomic Structure and the Periodic Table",
         "Bonding and Structure",
         "Redox I",
@@ -225,7 +257,7 @@ module.exports={
         "Acid-Base Equilibria",
         "Transition Metals"
     ],
-    "16": [
+    "18": [
         "Bonding and Structure",
         "Redox I",
         "Formulae, Equations and Amounts of Substance",
@@ -234,6 +266,17 @@ module.exports={
         "Organic Chemistry I",
         "Organic Chemistry II",
         "Organic Chemistry III"
+    ],
+    "19": [
+        "Measurements and Their Errors",
+        "Particles and Radiation",
+        "Waves",
+        "Mechanics and Materials",
+        "Electricity",
+        "Further Mechanics",
+        "Thermal Physics",
+        "Fields and Their Consequences",
+        "Nuclear Physics"
     ]
 }
 },{}]},{},[1]);
