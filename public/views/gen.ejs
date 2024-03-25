@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>QGenie - Your Exam Question Companion</title>
-    <!-- MathJax, only on tex loads-->
-
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <script src="check-for-tex.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="
     https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css
     " rel="stylesheet">
@@ -55,6 +54,8 @@
                                     <option value="14">AQA A Level Biology</option>
                                     <option value="15">Edexcel A Level Chemistry: Advanced Inorganic and Physical Chemistry</option>
                                     <option value="16">Edexcel A Level Chemistry: Advanced Organic and Physical Chemistry</option>
+                                    <option value="17">Edexcel A Level Government and Politics: Global Politics</option>
+                                    <option value="18">Edexcel A Level Government and Politics: Core and Non-core Political Ideas</option>
                                 </select>
                             </div>
                             <button id="generate-btn" class="flex-shrink-0 bg-white hover:bg-gray-300 border-white hover:border-gray-300 text-indigo-500 hover:text-white border-4 text-sm font-bold py-1 px-2 rounded" type="button">

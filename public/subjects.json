@@ -11,7 +11,9 @@
         "Market Failure and Externalities",
         "Public Goods and Quasi-Public Goods",
         "Common access resources",
-        "Information asymmetry and market failure"
+        "Information asymmetry and market failure",
+        "Sizes and Types of Firms",
+        ""
     ],
     "2": [
         "Measures of Economic Performance",
@@ -166,5 +168,23 @@
         "Organic Chemistry I",
         "Organic Chemistry II",
         "Organic Chemistry III"
+    ],
+    "17": [
+        "The state and Globalisation",
+        "Poltical Global Governance",
+        "Economic Global Governance",
+        "Environmental Global Governance",
+        "Human Rights Global Governance",
+        "Power and Developments",
+        "Regionalism and the EU"
+    ],
+    "18": [
+        "Liberalism",
+        "Conservatism",
+        "Socialism",
+        "Anarchism",
+        "Feminism",
+        "Ecologism",
+        "Nationalism"
     ]
 }

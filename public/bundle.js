@@ -54,12 +54,18 @@ generateBtn.addEventListener('click', async () => {
             questionContainer.innerHTML = '';
             para.innerText = question;
             questionContainer.appendChild(para);
-            if (MathJax) {
-                await MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
-            }
-            if(!MathJax) {
-                console.log("MathJax not loaded");
-            }
+            renderMathInElement(questionContainer, {
+                // customised options
+                // • auto-render specific keys, e.g.:
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                // • rendering keys, e.g.:
+                throwOnError : false
+              });
     } else {
         alert('Please select a prompt!');
         return;
@@ -79,7 +85,9 @@ module.exports={
         "Market Failure and Externalities",
         "Public Goods and Quasi-Public Goods",
         "Common access resources",
-        "Information asymmetry and market failure"
+        "Information asymmetry and market failure",
+        "Sizes and Types of Firms",
+        ""
     ],
     "2": [
         "Measures of Economic Performance",
@@ -234,6 +242,24 @@ module.exports={
         "Organic Chemistry I",
         "Organic Chemistry II",
         "Organic Chemistry III"
+    ],
+    "17": [
+        "The state and Globalisation",
+        "Poltical Global Governance",
+        "Economic Global Governance",
+        "Environmental Global Governance",
+        "Human Rights Global Governance",
+        "Power and Developments",
+        "Regionalism and the EU"
+    ],
+    "18": [
+        "Liberalism",
+        "Conservatism",
+        "Socialism",
+        "Anarchism",
+        "Feminism",
+        "Ecologism",
+        "Nationalism"
     ]
 }
 },{}]},{},[1]);
